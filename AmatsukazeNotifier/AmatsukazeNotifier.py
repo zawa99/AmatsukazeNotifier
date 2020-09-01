@@ -16,7 +16,6 @@ def main():
     colorama.init(autoreset = True)
     utils = Utils()
     if config.NOTIFY_LOG:
-    
         # 標準出力をファイルに変更
         sys.stdout = open(os.path.dirname(__file__) + '/' + 'AmatsukazeNotifier.log', mode = 'w', encoding = 'utf-8')
     
@@ -35,7 +34,6 @@ def main():
         caller = sys.argv[1] # 呼び出し元のバッチファイルの名前
         print('Event: ' + caller, end = '\n\n')
 
-
         # NOTIFY_MESSAGE にあるイベントでかつ通知がオンになっていれば
         if (caller in config.NOTIFY_MESSAGE and caller in config.NOTIFY_EVENT):
 
@@ -47,17 +45,16 @@ def main():
             print('Info: ' + caller + ' notification is off, so it ends.', end = '\n\n')
             sys.exit(0)
 
-        else :
+        else:
 
             # 引数が不正なので終了    
             utils.error('Invalid argument.')
 
-    else :
+    else:
 
         # 引数がないので終了
         utils.error('Argument does not exist.')
-        
-        
+
 
     # マクロを取得
     macros = utils.get_macro(os.environ)
@@ -91,8 +88,8 @@ def main():
         # 画像なし
         image = None
     
-    #絵文字を無視して絵文字を無視してコンソールに出力
     
+    #絵文字を無視して絵文字を無視してコンソールに出力
     print(("Message: " + message.replace("\n", "\n         ")).encode('cp932','ignore'), end = "\n\n")
 
 
