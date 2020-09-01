@@ -12,12 +12,12 @@ from sendtwitter import Twitter
 
 def main():
 
-    #初期化
+    # 初期化
     colorama.init(autoreset = True)
-    utils=Utils()
+    utils = Utils()
     if config.NOTIFY_LOG:
     
-    # 標準出力をファイルに変更
+        # 標準出力をファイルに変更
         sys.stdout = open(os.path.dirname(__file__) + '/' + 'AmatsukazeNotifier.log', mode = 'w', encoding = 'utf-8')
     
     # ヘッダー
@@ -29,13 +29,12 @@ def main():
     print('Time: ' + str(utils.get_exection_time()), end = '\n\n')
 
 
-    #引数を受け取る
-    if (len(sys.argv)>1):
+    # 引数を受け取る
+    if (len(sys.argv) > 1):
 
-        caller = sys.argv[1] #呼び出し元のバッチファイルの名前
-        print("Event: "+caller, end="\n\n")
+        caller = sys.argv[1] # 呼び出し元のバッチファイルの名前
+        print('Event: ' + caller, end = '\n\n')
 
-        #メッセージをセット
 
         # NOTIFY_MESSAGE にあるイベントでかつ通知がオンになっていれば
         if (caller in config.NOTIFY_MESSAGE and caller in config.NOTIFY_EVENT):
@@ -48,21 +47,21 @@ def main():
             print('Info: ' + caller + ' notification is off, so it ends.', end = '\n\n')
             sys.exit(0)
 
-        else:
+        else :
 
             # 引数が不正なので終了    
             utils.error('Invalid argument.')
 
     else :
 
-        #引数がないので終了
+        # 引数がないので終了
         utils.error('Argument does not exist.')
         
         
 
     # マクロを取得
     macros = utils.get_macro(os.environ)
-    
+
     # マクロでメッセージを置換
     errormessage = config.ErrorMessage
     for macro, macro_value in macros.items():
