@@ -1,3 +1,4 @@
+
 # ====================  環境設定  ====================
 
 # [] で囲われている部分は配列 (list)
@@ -18,7 +19,6 @@
 # ex (LINE とツイート): NOTIFY_TYPE = ['LINE', 'Tweet']
 # ex (LINE とダイレクトメッセージ): NOTIFY_TYPE = ['LINE', 'DirectMessage']
 # ex (全て): NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
-
 
 NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
 
@@ -64,6 +64,17 @@ NOTIFY_IMAGE = None
 # ex: NOTIFY_DIRECTMESSAGE_TO = None
 
 NOTIFY_DIRECTMESSAGE_TO = None
+
+
+# ログをファイルに保存（出力）するか
+# True に設定した場合は、ログを config.py と同じフォルダの EDCBNotifier.log に保存します（コンソールに表示しない・前回のログは上書きされる）
+# False に設定した場合は、ログを保存しません（コンソールに表示する）
+# True・False にはシングルクオートをつけず、大文字で始めてください (true・false は NG)
+# うまく通知されないときに True にしてログを確認してみるといいかも
+
+NOTIFY_LOG = False
+
+
 
 
 # ===================  メッセージ  ===================
