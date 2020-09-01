@@ -28,17 +28,12 @@ NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
 # ここで設定したイベントだけが通知されます（通知オフ） 設定されなかったイベントは通知されない（通知オフ）
 # 各 .bat ファイルを配置しないことでも通知イベントのオン・オフは可能ですが、できるだけこの設定を使うことを推奨します
 
-# PostAddReserve … 予約を追加したとき ( PostAddReserve.bat が実行されたとき)
-# PostChgReserve … 予約を変更したとき ( PostChgReserve.bat が実行されたとき)
-# PostRecStart … 録画を開始したとき（ PostRecStart.bat が実行されたとき）
-# PostRecEnd … 録画を終了したとき（ PostRecEnd.bat が実行されたとき）
-# PostNotify … 更新通知が送られたとき（ PostNotify.bat が実行されたとき）
+# PostEncStart … 変換を開始したとき
+# PostEncSuccess … 変換が成功したとき
+# PostEncFailed … 変換が失敗したとき
 
-# ex (全て通知): NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve', 'PostRecStart', 'PostRecEnd', 'PostNotify']
-# ex (PostNotify 以外を通知): NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve', 'PostRecStart', 'PostRecEnd']
-# ex (予約の追加・変更を通知): NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve']
-# ex (録画の開始・終了を通知): NOTIFY_EVENT = ['PostRecStart', 'PostRecEnd']
-# ex (録画結果だけ通知): NOTIFY_EVENT = ['PostRecEnd']
+# ex (全て通知): NOTIFY_EVENT = ['PostEncStart', 'PostEncSuccess', 'PostEncFailed']
+# ex (変換終了時のみ通知): NOTIFY_EVENT = ['PostEncSuccess', 'PostEncFailed']
 
 NOTIFY_EVENT = ['PostEncStart', 'PostEncSuccess', 'PostEncFailed']
 
@@ -48,8 +43,8 @@ NOTIFY_EVENT = ['PostEncStart', 'PostEncSuccess', 'PostEncFailed']
 # 画像サイズが大きすぎると送れない場合があるので注意
 # None (シングルクオートはつけない) に設定した場合は画像を送信しません
 
-# ex: NOTIFY_IMAGE = 'C:\Users\User\Pictures\EDCBNotifier.png'
-# ex: NOTIFY_IMAGE = 'EDCBNotifier.png'
+# ex: NOTIFY_IMAGE = 'C:\Users\User\Pictures\AmatsukazeNotifier.png'
+# ex: NOTIFY_IMAGE = 'AmatsukazeNotifier.png'
 # ex: NOTIFY_IMAGE = None
 
 NOTIFY_IMAGE = None
@@ -82,7 +77,7 @@ NOTIFY_LOG = False
 # 改行を入れる場合は文字列内に \n と入力してください
 # 文字列は + で連結できます
 #
-#マクロ調整中
+# 使用可能なマクロについてはREADME.mdを参照
 
 NOTIFY_MESSAGE = {
 
@@ -99,6 +94,11 @@ NOTIFY_MESSAGE = {
 }
 
 #変換終了時のエラーメッセージ
+
+#PostEncSuccessまたはPostEncFailedではエラーメッセージがメッセージの下に追加されます
+#エラーがない場合にはエラーメッセージは追加されません
+#エラーメッセージにもマクロを使用する事ができます
+#エラーメッセージを表示したくない場合は ErrorMessage = ''　の用にクオーテーション内を空欄にしてください。
 
 ErrorMessage = 'エラー: $ERROR_MESSAGE$'
 

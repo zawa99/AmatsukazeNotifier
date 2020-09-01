@@ -14,7 +14,8 @@ Amatsukaze から LINE や Twitter（ツイート・DM）に通知を送れる�
 - Twitter (ツイート)
 - Twitter (ダイレクトメッセージ)
 
-に Amatsukaze の各通知を送信できる Python 製ツールです。tsukumijima氏の[EDCBNotifier](https://github.com/tsukumijima/EDCBNotifier)を元に制作しました。
+に Amatsukaze の各通知を送信できる Python 製ツールです。
+tsukumijima氏の[EDCBNotifier](https://github.com/tsukumijima/EDCBNotifier)を元に制作しました。
 
 Amatsukaze のバッチファイル実行機能を利用しているため、変換処理の実行前後に通知を送る事が可能です。
 
@@ -41,7 +42,6 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 
 通知するメッセージは 3 つのイベントごとに自由に変更できます。  
 設定ファイルは Python スクリプトなので、Python の知識があればメッセージをより高度にカスタマイズすることもできそうです。  
-基本的にはEDCBNotifierに準拠したマクロとなっていますが、AmatsukazeNotifierでは使えないものが多くある他、独自のマクロもあります。
 
 ## Setup
 
@@ -54,7 +54,7 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 
 ダウンロードできたら解凍し、
 
-- EDCBNotifier フォルダ
+- AmatsukazeNotifier フォルダ
 - bat
 
 を Amatsukaze 本体 (Amatsukaze.vbs) があるフォルダに配置します。  
@@ -62,7 +62,7 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 
 ### 2. Python のインストール
 
-EDCBNotifier の実行には Python (Python3) が必要です 。動作確認は Python 3.7 系と Python 3.8 系で行っています。
+AmatsukazeNotifier の実行には Python (Python3) が必要です 。動作確認は Python 3.7 系と Python 3.8 系で行っています。
 
 すでに Python3 がインストールされている場合はスキップしても構いませんが、**すでに Python2 がインストールされている場合は別途 Python3 をインストールしてください。**  
 （Python2 と Python3 は半分別物で、このうち Python2 は 2020 年 1 月でサポートが終了しています）
@@ -101,9 +101,9 @@ Python 公式サイトにも大きいダウンロードボタンがあります�
 
 ### 3. 依存ライブラリのインストール
 
-EDCBNotifier が必要とする colorama・jaconv・requests・twitter の各ライブラリを pip でインストールします。  
+AmatsukazeNotifier が必要とする colorama・jaconv・requests・twitter の各ライブラリを pip でインストールします。  
 
-**コマンドプロンプトや PowerShell を開き、`pip install -r (ダウンロードした EDCBNotifier\requirements.txt)` と実行します。**  
+**コマンドプロンプトや PowerShell を開き、`pip install -r (ダウンロードした AmatsukazeNotifier\requirements.txt)` と実行します。**  
 または単に `pip install -r colorama jaconv requests twitter` としても構いません。
 
 エラーなくインストールできれば OK です。
@@ -115,7 +115,7 @@ config.default.py を config.py にコピーしてください（コピーして
 
 リネームでもかまいませんが、設定をミスったときのために config.default.py は取っておくことを推奨します。
 
-### 5. Amatsukaze の再起動
+### 5. Amatsukaze でバッチを登録
 
 Amatsukaze/bat/ に追加した .bat ファイルはAmatsukazeに自動で認識され、頭に "実行前_"と付くものは実行前バッチとして、"実行後_"と付くものは実行後バッチとして登録が可能になります。
 プロファイルタブから使用するプロファイルを選んで実行前バッチと実行後バッチの項目に 実行前_AmatsukazeNotifier.bat と 実行後_AmatsukazeNotifier.bat を登録して適用してください。
@@ -151,7 +151,7 @@ None に設定した場合は画像を送信しません。画像サイズが大
 デフォルト … 自分宛てに送信する (`None`)
 
 **ログをファイルに保存するか** (NOTIFY_LOG) では、ログをファイルに保存（出力）するかどうかを設定します。  
-True に設定した場合は、ログを config.py と同じフォルダの EDCBNotifier.log に保存します。前回のログは上書きされます。また、コンソールへログを出力しなくなります。  
+True に設定した場合は、ログを config.py と同じフォルダの AmatsukazeNotifier.log に保存します。前回のログは上書きされます。また、コンソールへログを出力しなくなります。  
 False に設定した場合は、ログを保存しません。通常通りコンソールにログを出力します。  
 デフォルト … ログをファイルに保存しない (`False`)
 
@@ -163,29 +163,98 @@ False に設定した場合は、ログを保存しません。通常通りコ�
 通知イベントごとにメッセージを編集できます。  
 通知するメッセージの設定は config.py の \[メッセージ] セクションにあります。
 
-基本的にマクロの形式は EDCBNotifier に準拠していますが、使えないものが多くある他、独自のマクロもあります。
-また、実行後バッチのみで使用可能なマクロもあります
+マクロの形式は EDCBNotifier とは異なるので注意。
+Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/Amatsukaze/wiki/%E3%83%90%E3%83%83%E3%83%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%AE%9F%E8%A1%8C%E6%A9%9F%E8%83%BD)に環境変数として記載されているものは前後に/$をつければ基本的にそのまま使えます。
+実行後バッチでしか利用できないものもあるので注意してください。
+
 
 使用可能マクロ一覧
 
-- \$HashTag\$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
-- \$NotifyName\$ … \$NofityID\$ から取得した更新通知タイプ（\$NofityID\$ = 1 … EPGデータ更新 2 … 予約情報更新 3 … 録画結果情報更新）
-- \$ServiceNameHankaku\$ … \$ServiceName\$（放送局名）の英数字を半角に変換したもの
-- \$TitleHankaku\$ … \$Title\$（番組タイトル）の英数字を半角に変換したもの
-- \$Title2Hankaku\$ … \$Title2\$（番組タイトル・[]で囲まれている部分を削除したもの）の英数字を半角に変換したもの
-- \$TimeYYYY\$ … 実行時刻の上2桁付き西暦年 (ex: 2020 (年))  \$TimeYY\$ … 実行時刻の上2桁なし西暦年 (ex: 20 (年))
-- \$TimeMM\$ … 実行時刻の2桁固定の月 (ex: 07 (月))  \$TimeM\$ … 実行時刻の月 (ex: 7 (月))
-- \$TimeDD\$ … 実行時刻の2桁固定の日 (ex: 09 (日))  \$TimeD\$ … 実行時刻の日 (ex: 9 (日))
-- \$TimeW\$ … 実行時刻の曜日 (ex: 火 (曜日))
-- \$TimeHH\$ … 実行時刻の2桁固定の時 (24時間) (ex: 06 (時))  \$TimeH\$ … 実行時刻の日 (ex: 6 (時))
-- \$TimeII\$ … 実行時刻の2桁固定の分 (ex: 08 (分))  \$TimeI\$ … 実行時刻の分 (ex: 8 (分))
-- \$TimeSS\$ … 実行時刻の2桁固定の秒 (ex: 02 (秒))  \$TimeS\$ … 実行時刻の分 (ex: 2 (秒))
+#### 実行前、実行後共通
+Amatsukazeの環境変数と同じマクロ
+- /$ITEM_ID/$ … アイテムに一意に振られるID。追加時、実行前、実行後で同じアイテムを追跡できる。Amatsukazeを再起動するとIDが変わるので注意。
+- /$IN_PATH/$ … 入力ファイルパス
+- /$OUT_PATH/$ … 出力ファイルパス（拡張子を含まない）
+- /$SERVICE_ID/$ … サービスID（チャンネルID）
+- /$SERVICE_NAME/$ … サービス名（チャンネル名）
+- /$TS_TIME/$ … TSファイルの時刻
+- /$ITEM_MODE/$ … モード。Batch…通常 AutoBatch…自動追加 Test…テスト DrcsCheck…DRCSチェック CMCheck…CMチェック
+- /$ITEM_PRIORITY/$ … アイテム優先度(1-5)
+- /$ITEM_GENRE/$ … 番組ジャンル
+- /$IMAGE_WIDTH/$ … 映像幅
+- /$IMAGE_HEIGHT/$ … 映像高さ
+- /$EVENT_NAME/$ … 番組名
+- /$TAG/$ … タグ（セミコロン区切り）
+- /$PROFILE_NAME/$ … プロファイル名
+
+独自マクロ
+- /$SDYYYY/$ … 番組開始日の年4桁
+- /$SDYY/$ … 番組開始日の年2桁
+- /$SDMM/$ … 番組開始日の月2桁固定
+- /$SDM/$ … 番組開始日の月
+- /$SDDD/$ … 番組f開始日の日2桁固定
+- /$SDD/$ … 番組開始日の日
+- /$SDW/$ … 番組開始日の曜日
+- /$STHH/$ … 番組開始時刻の時2桁固定
+- /$STH/$ … 番組開始時刻の時
+- /$STMM/$ … 番組開始時刻の分2桁固定
+- /$STM/$ … 番組開始時刻の分
+- /$STSS/$ … 番組開始時刻の秒2桁固定
+- /$STS/$… 番組開始時刻の秒
+- /$EDYYYY/$ … 番組終了日の年4桁
+- /$EDYY/$ … 番組終了日の年2桁
+- /$EDYY/$ … 番組終了日の年4桁
+- /$EDMM/$ … 番組終了日の月2桁固定
+- /$EDM/$ … 番組終了日の月
+- /$EDDD/$ … 番組終了日の日2桁固定
+- /$EDD/$ … 番組終了日の日
+- /$EDW/$ … 番組終了日の曜日
+- /$ETHH/$ … 番組終了時刻の時2桁固定
+- /$ETH/$ … 番組終了時刻の時
+- /$ETMM/$ … 番組終了時刻の分2桁固定
+- /$ETM/$ … 番組終了時刻の分
+- /$ETSS/$ … 番組終了時刻の秒2桁固定
+- /$ETS/$ … 番組終了時刻の秒
+- /$HashTag/$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
+- /$ServiceNameHankaku/$ … サービス名（チャンネル名） 英数半角
+- /$EventNameHankaku/$ … 番組名 英数半角
+
+
+
+#### 実行後のみで有効
+Amatsukazeの環境変数と同じマクロ
+- /$SUCCESS/$ … 成功=1,失敗=0
+- /$ERROR_MESSAGE/$ … エラーメッセージ（失敗したときのみ）
+- /$IN_DURATION/$ … 入力ファイルの再生時間
+- /$OUT_DURATION/$… 出力ファイルの再生時間
+- /$IN_SIZE/$… 入力ファイルのサイズ（バイト単位）
+- /$OUT_SIZE/$ … 出力ファイルのサイズ（バイト単位）
+- /$LOGO_FILE/$ … ロゴファイルパス
+- /$NUM_INCIDENT/$ … インシデント数
+- /$JJSON_PATH/$ … 出力JSONパス
+- /$LOG_PATH/$ … ログファイルパス
+
+独自マクロ
+- /$CDTime/$ … AmatsukazeがCMと判定してカットした時間（HH:MM:SS)
+- /$CDSecs/$ … AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
+- /$CDHH/$ … AmatsukazeがCMと判定してカットした時間の時2桁固定
+- /$CDH/$ … AmatsukazeがCMと判定してカットした時間の時
+- /$CDMM/$ … AmatsukazeがCMと判定してカットした時間の分2桁固定
+- /$CDM/$ … AmatsukazeがCMと判定してカットした時間の分
+- /$CDSS/$ … AmatsukazeがCMと判定してカットした時間の秒2桁固定
+- /$CDS/$ … AmatsukazeがCMと判定してカットした時間の秒
+- /$CutDur/$ … AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
+- /$CompressSizeByte/$ … エンコードで圧縮したサイズ（バイト単位）
+- /$CompressSizeKB/$ … エンコードで圧縮したサイズ（KB単位）
+- /$CompressSizeMB/$ … stエンコードで圧縮したサイズ（MB単位）
+- /$CompressSizeGB/$ … エンコードで圧縮したサイズ（GB単位）少数第一位まで
 
 Python の辞書 (dict) 形式で格納しているので、改行を入れる場合は文字列内に \n と入力してください。文字列は + で連結できます。  
 
+
 また、PostEncSuccess と PostEncFailed 用にエラーメッセージを設定できます。
 
-Amatsukazeからエラーが出力された際には[エラー: DRCSマッピングのない文字 127件]や[エラー: キャンセルされました]の様な文字列をメッセージの最後に追加します。
+Amatsukazeからエラーが出力された際には \[エラー: DRCSマッピングのない文字 127件] や \[エラー: キャンセルされました] の様な文字列をメッセージの最後に追加します。
 エラーがなかった場合には追加されません。
 このエラーメッセージも config.py の ErrorMessage でマクロで自由にカスタマイズする事が可能です。
 エラーメッセージを使用しない場合は ErrorMessage = ''のように何も入力しないでください。
@@ -206,7 +275,7 @@ LINE Notify へ通知しない場合は必要ありませんが、後述する T
 
 ![Screenshot](https://user-images.githubusercontent.com/39271166/88370184-81a02500-cdcc-11ea-8147-772f3ceb9662.png)
 
-トークン名は LINE Notify で通知が送られてきたときに \[EDCBNotifier] のように付加される文字列です（ LINE Notify 全体でユニークである必要はないらしい）。  
+トークン名は LINE Notify で通知が送られてきたときに \[AmatsukazeNotifier] のように付加される文字列です（ LINE Notify 全体でユニークである必要はないらしい）。  
 通知を送信するトークルームは \[1:1 で LINE Notify から通知を受ける] か、任意のグループ LINE を選択してください。  
 ここでは「1:1 で LINE Notify から通知を受ける」（現在ログインしているアカウントに届く）を選択します。 
 
@@ -235,7 +304,7 @@ Twitter へ通知する場合は Twitter へ開発者登録を申請し、開発
 Twitter API を使うためには後述する Consumer Key・Consumer Secret・Access Token・Access Token Secret の 4 つが必要ですが、このうち Twitter Developers でアプリ作成後に生成できる Access Token・Access Token Secret は開発者アカウントをしたアカウントのものが表示されます。  
 裏を返せば、予め開発者アカウントで Consumer Key・Consumer Secret を作成・取得し、ツイートさせたい Twitter アカウントとアプリ連携して Access Token・Access Token Secret が取得できれば、開発者登録をしたアカウント以外でも録画通知用のアカウントにできる、とも言えます。
 
-EDCBNotifierの作者tsukumijima氏のツールである、[Twitter API のアクセストークンを確認するやつ](https://tools.tsukumijima.net/twittertoken-viewer/) を使うと、EDCBNotifier のようなアプリ連携を実装していないツールでも Access Token・Access Token Secret を取得できます（極論、これを使わなくても作成した Consumer Key・Consumer Secret で録画通知用のアカウントとアプリ連携して Access Token・Access Token Secret を取得できれば可能です）。  
+EDCBNotifierの作者tsukumijima氏のツールである、[Twitter API のアクセストークンを確認するやつ](https://tools.tsukumijima.net/twittertoken-viewer/) を使うと、AmatsukazeNotifier のようなアプリ連携を実装していないツールでも Access Token・Access Token Secret を取得できます（極論、これを使わなくても作成した Consumer Key・Consumer Secret で録画通知用のアカウントとアプリ連携して Access Token・Access Token Secret を取得できれば可能です）。  
 
 [Twitter Developers](https://developer.twitter.com/en/apps) にアクセスし、右上の \[Create App] から Twitter Developer アプリケーションの作成画面に移動します（ここで言う Twitter Developer アプリケーション（以下 Twitter API アプリ）は Twitter API を使うプロジェクトのような意味です）。  
 Twitter API アプリを作成すると、Twitter API を使うために必要な Consumer Key・Consumer Secret を取得できます。   
@@ -248,12 +317,12 @@ Twitter API アプリを作成すると、Twitter API を使うために必要�
 ここの名前がツイートの via として表示されます。  
 いわゆる「独自 via 」と呼ばれるものです。後で変えることもできるので、好きな via にしましょう。
 
-（例）EDCBNotifier@（自分の TwitterID ）  
+（例）AmatsukazeNotifier@（自分の TwitterID ）  
 （例）Twitter for （自分の Twitter 名）  
 
 #### Application description（必須）
 
-（例）EDCBNotifier@example から録画通知をツイートするためのアプリケーションです。
+（例）AmatsukazeNotifier@example から録画通知をツイートするためのアプリケーションです。
 
 #### Website URL（必須）
 
@@ -290,12 +359,12 @@ Twitter API アプリを作成すると、Twitter API を使うために必要�
 
 #### Tell us how this app will be used（必須）  
 
-（例）このアプリケーションは、EDCBNotifier から通知をツイートするためのアプリケーションです。  
+（例）このアプリケーションは、AmatsukazeNotifier から通知をツイートするためのアプリケーションです。  
 　　　このアプリケーションは、テレビの録画予約の追加・変更、録画の開始・終了をツイートやダイレクトメッセージで通知します。
 
 #### （英語・こちらをコピペ）
 
-（例）This application is for tweeting notifications from EDCBNotifier.   
+（例）This application is for tweeting notifications from AmatsukazeNotifier.   
 　　　This application notifies you of the addition/change of TV recording reservation and the start/end of recording by tweet or directmessage.
 
 記入し終えたら \[Create] をクリックし、Twitter API アプリを作成します。
@@ -327,7 +396,7 @@ Access Token・Access Token Secret が表示されるので、クリップボー
 
 
 これで設定は完了です！お疲れさまでした！   
-なにか不具合や要望などあれば [Issues](https://github.com/nukemiri/AmatsukazeNotifier/issues) か [Twitter](https://twitter.com/mochiken0625) までお願いします。 
+なにか不具合や要望などあれば [Issues](https://github.com/nukemiri/AmatsukazeNotifier/issues) までお願いします。 
 
 ## License
 [MIT Licence](LICENSE.txt)
