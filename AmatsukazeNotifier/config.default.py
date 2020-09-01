@@ -1,4 +1,3 @@
-
 # ====================  環境設定  ====================
 
 # [] で囲われている部分は配列 (list)
@@ -20,6 +19,7 @@
 # ex (LINE とダイレクトメッセージ): NOTIFY_TYPE = ['LINE', 'DirectMessage']
 # ex (全て): NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
 
+
 NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
 
 
@@ -38,9 +38,9 @@ NOTIFY_TYPE = ['LINE', 'Tweet', 'DirectMessage']
 # ex (PostNotify 以外を通知): NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve', 'PostRecStart', 'PostRecEnd']
 # ex (予約の追加・変更を通知): NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve']
 # ex (録画の開始・終了を通知): NOTIFY_EVENT = ['PostRecStart', 'PostRecEnd']
-# ex (録画結果だけ通知): NOTIFY_EVENT = ['PostRecEnd'] 
+# ex (録画結果だけ通知): NOTIFY_EVENT = ['PostRecEnd']
 
-NOTIFY_EVENT = ['PostAddReserve', 'PostChgReserve', 'PostRecStart', 'PostRecEnd', 'PostNotify']
+NOTIFY_EVENT = ['PostEncStart', 'PostEncSuccess', 'PostEncFailed']
 
 
 # 通知時に同時に送信する画像 (フルパスで指定)
@@ -66,62 +66,30 @@ NOTIFY_IMAGE = None
 NOTIFY_DIRECTMESSAGE_TO = None
 
 
-# ログをファイルに保存（出力）するか
-# True に設定した場合は、ログを config.py と同じフォルダの EDCBNotifier.log に保存します（コンソールに表示しない・前回のログは上書きされる）
-# False に設定した場合は、ログを保存しません（コンソールに表示する）
-# True・False にはシングルクオートをつけず、大文字で始めてください (true・false は NG)
-# うまく通知されないときに True にしてログを確認してみるといいかも
-
-NOTIFY_LOG = False
-
-
 # ===================  メッセージ  ===================
 
 # 改行を入れる場合は文字列内に \n と入力してください
 # 文字列は + で連結できます
-# 
-# https://github.com/xtne6f/EDCB/blob/70b2331aadb328eb347fe0c4e4e23c8e91d286b7/Document/Readme_EpgTimer.txt#L929-L1008 と
-# https://github.com/xtne6f/EDCB/blob/4c3bd5be3dc49607aa821d728105955c03fba4db/Document/Readme_Mod.txt#L451-L475 に記載されている EDCB のマクロが使えます
-# マクロは $$ で囲んでください (ex: $ServiceName$)
-# 
-# また、独自にいくつかのマクロを追加しています
-# ・$HashTag$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
-# ・$NotifyName$ … $NofityID$ から取得した更新通知タイプ（$NofityID$ = 1 … EPGデータ更新 2 … 予約情報更新 3 … 録画結果情報更新）
-# ・$ServiceNameHankaku$ … $ServiceName$（放送局名）の英数字を半角に変換したもの
-# ・$TitleHankaku$ … $Title$（番組タイトル）の英数字を半角に変換したもの
-# ・$Title2Hankaku$ … $Title2$（番組タイトル・[]で囲まれている部分を削除したもの）の英数字を半角に変換したもの
-# ・$TimeYYYY$ … 実行時刻の上2桁付き西暦年 (ex: 2020 (年))  $TimeYY$ … 実行時刻の上2桁なし西暦年 (ex: 20 (年))
-# ・$TimeMM$ … 実行時刻の2桁固定の月 (ex: 07 (月))  $TimeM$ … 実行時刻の月 (ex: 7 (月))
-# ・$TimeDD$ … 実行時刻の2桁固定の日 (ex: 09 (日))  $TimeD$ … 実行時刻の日 (ex: 9 (日))
-# ・$TimeW$ … 実行時刻の曜日 (ex: 火 (曜日))
-# ・$TimeHH$ … 実行時刻の2桁固定の時 (24時間) (ex: 06 (時))  $TimeH$ … 実行時刻の日 (ex: 6 (時))
-# ・$TimeII$ … 実行時刻の2桁固定の分 (ex: 08 (分))  $TimeI$ … 実行時刻の分 (ex: 8 (分))
-# ・$TimeSS$ … 実行時刻の2桁固定の秒 (ex: 02 (秒))  $TimeS$ … 実行時刻の分 (ex: 2 (秒))
+#
+#マクロ調整中
 
 NOTIFY_MESSAGE = {
 
-    # 予約を追加したとき（ PostAddReserve.bat が実行されたとき）に送信するメッセージ
-    'PostAddReserve': '➕ 予約追加: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' +
-                      '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$',
+    # 変換を開始したとき（ 実行前_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
+    'PostEncStart': '🔥 変換開始: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$',
 
-    # 予約を変更したとき（ PostChgReserve.bat が実行されたとき）に送信するメッセージ
-    'PostChgReserve': '📢 予約変更: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' +
-                      '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$',
-
-    # 録画を開始したとき（ PostRecStart.bat が実行されたとき）に送信するメッセージ
-    'PostRecStart':   '⏺ 録画開始: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' +
-                      '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$',
-
-    # 録画を終了したとき（ PostRecEnd.bat が実行されたとき）に送信するメッセージ
-    'PostRecEnd':     '⏹ 録画終了: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' +
-                      '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$ \n' +
-                      'Drop: $Drops$ Scramble: $Scrambles$ Comment: $Result$',
-
-    # 更新通知が送られたとき（ PostNotify.bat が実行されたとき）に送信するメッセージ
-    'PostNotify':     '🔔 通知: $NotifyName$ ($TimeMM$/$TimeDD$ $TimeHH$:$TimeII$:$TimeSS$)',
+    # 変換が成功したとき（ 実行後_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
+    'PostEncSuccess': '✅ 変換成功: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$\n'+'カット: $CutDur$ 圧縮: $CompressSizeGB$GB',
+    
+    # 変換が失敗したとき（ 実行後_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
+    'PostEncFailed': '⚠️ 変換失敗: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$'
+    
 
 }
 
+#変換終了時のエラーメッセージ
+
+ErrorMessage = 'エラー: $ERROR_MESSAGE$'
 
 # ==================  LINE Notify  ==================
 

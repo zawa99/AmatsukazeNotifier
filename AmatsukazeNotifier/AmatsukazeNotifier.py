@@ -10,30 +10,32 @@ from utils import Utils
 from sendline import Line
 from sendtwitter import Twitter
 
-
 def main():
-    
-    # 初期化
-    colorama.init(autoreset = True)
-    utils = Utils()
-    if config.NOTIFY_LOG:
-        # 標準出力をファイルに変更
-        sys.stdout = open(os.path.dirname(__file__) + '/' + 'EDCBNotifier.log', mode = 'w', encoding = 'utf-8')
 
+    #初期化
+    colorama.init(autoreset = True)
+    utils=Utils()
+    if config.NOTIFY_LOG:
+    
+    # 標準出力をファイルに変更
+        sys.stdout = open(os.path.dirname(__file__) + '/' + 'AmatsukazeNotifier.log', mode = 'w', encoding = 'utf-8')
+    
     # ヘッダー
     header = '+' * 60 + '\n'
-    header += '+{:^58}+\n'.format('EDCBNotifier version ' + utils.get_version())
+    header += '+{:^58}+\n'.format('AmatsukazeNotifier version ' + utils.get_version())
     header += '+' * 60 + '\n'
     print('\n' + header)
 
     print('Time: ' + str(utils.get_exection_time()), end = '\n\n')
 
 
-    # 引数を受け取る
-    if (len(sys.argv) > 1):
+    #引数を受け取る
+    if (len(sys.argv)>1):
 
-        caller = sys.argv[1] # 呼び出し元のバッチファイルの名前
-        print('Event: ' + caller, end = '\n\n')
+        caller = sys.argv[1] #呼び出し元のバッチファイルの名前
+        print("Event: "+caller, end="\n\n")
+
+        #メッセージをセット
 
         # NOTIFY_MESSAGE にあるイベントでかつ通知がオンになっていれば
         if (caller in config.NOTIFY_MESSAGE and caller in config.NOTIFY_EVENT):
@@ -51,21 +53,28 @@ def main():
             # 引数が不正なので終了    
             utils.error('Invalid argument.')
 
-    else:
+    else :
 
-        # 引数がないので終了
+        #引数がないので終了
         utils.error('Argument does not exist.')
-
+        
+        
 
     # マクロを取得
     macros = utils.get_macro(os.environ)
-
+    
     # マクロでメッセージを置換
+    errormessage = config.ErrorMessage
     for macro, macro_value in macros.items():
 
         # $$ で囲われた文字を置換する
         message = message.replace('$' + macro + '$', macro_value)
+        errormessage = errormessage.replace('$' + macro + '$', macro_value)
 
+    # エラーメッセージがある場合メッセージに追加
+    if (caller == "PostEncSuccess" or caller == "PostEncFailed") and macros["ERROR_MESSAGE"] != "":
+        message += ("\n"+ errormessage)
+        print("エラーメッセージを検出: " + errormessage)
 
     # 送信する画像
     if (config.NOTIFY_IMAGE != None and os.path.isfile(config.NOTIFY_IMAGE)):
@@ -82,9 +91,10 @@ def main():
 
         # 画像なし
         image = None
-
-
-    print('Message: ' + message.replace('\n', '\n         '), end = '\n\n')
+    
+    #絵文字を無視して絵文字を無視してコンソールに出力
+    
+    print(("Message: " + message.replace("\n", "\n         ")).encode('cp932','ignore'), end = "\n\n")
 
 
     # LINE Notify にメッセージを送信
@@ -106,7 +116,6 @@ def main():
                 # ステータスが 200（成功）
                 print('[LINE Notify] Result: Success (Code: ' + str(result_line['status']) + ')')
                 print('[LINE Notify] Message: ' + result_line['message'], end = '\n\n')
-
 
     # Twitter にツイートを送信
     if ('Tweet' in config.NOTIFY_TYPE):
