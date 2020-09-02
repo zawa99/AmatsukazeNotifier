@@ -1,7 +1,7 @@
 
 # AmatsukazeNotifier
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88943606-a877c300-d2c6-11ea-8323-7914f78f50e0.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/01.jpg)
 
 Amatsukaze から LINE や Twitter（ツイート・DM）に通知を送れるツールです。
 
@@ -47,7 +47,7 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 
 ### 1. ダウンロード・配置
 
-<img src="https://user-images.githubusercontent.com/39271166/88381578-a357d700-cde1-11ea-9f5a-12f559af093a.png" width="400px">
+<img src="https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/02.png" width="400px">
 
  \[Code] メニュー内の \[Download Zip] をクリックし、AmatsukazeNotifier をダウンロードします。  
 または、[こちら](https://github.com/nukemiri/AmatsukazeNotifier/archive/master.zip) のリンクからでもダウンロードできます。
@@ -67,7 +67,7 @@ AmatsukazeNotifier の実行には Python (Python3) が必要です 。動作確
 すでに Python3 がインストールされている場合はスキップしても構いませんが、**すでに Python2 がインストールされている場合は別途 Python3 をインストールしてください。**  
 （Python2 と Python3 は半分別物で、このうち Python2 は 2020 年 1 月でサポートが終了しています）
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88384104-c042d900-cde6-11ea-89f3-a1341b5d998e.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/03.png)
 
 [非公式 Python ダウンロードリンク](https://pythonlinks.python.jp/ja/index.html) から、Python3 のインストーラーをダウンロードします。  
 とくにこだわりがないのであれば、**一番上にある Windows (64bit) 用 Python 3.8 の最新版 ( 2020 年 7 月現在の最新は 3.8.5 ) をダウンロードしてください。**  
@@ -78,7 +78,7 @@ Python 公式サイトにも大きいダウンロードボタンがあります�
 もし OS が 32bit の方は Windows (32bit) 用をダウンロードしてください（ほとんどいないと思うけど…）。  
 **Windows10 では Microsoft Store からもインストールすることができますが、安定していない上にストアアプリの制限の影響で正常に動かないことがあるため、非推奨です。**
 
-<img src="https://user-images.githubusercontent.com/39271166/88402926-be890d80-ce06-11ea-87fd-59c80cbd046e.png" width="600px">
+<img src="https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/04.png" width="600px">
 
 ダウンロードが終わったらインストーラーを実行します。
  \[Install Now] と \[Custom Install] がありますが、 \[Custom Install] の方をクリックしてください。  
@@ -86,7 +86,7 @@ Python 公式サイトにも大きいダウンロードボタンがあります�
 
  \[Option Features] は特にこだわりがなければそのまま進みます。  
 
-<img src="https://user-images.githubusercontent.com/39271166/88402933-c3e65800-ce06-11ea-912f-e46151231e97.png" width="600px">
+<img src="https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/05.png" width="600px">
 
  \[Advanced Options] は ** \[Install for all users] にチェックを入れます**（これで AppData 以下に配置されなくなる）。  
 デフォルトでは AppData 以下にユーザーインストールする設定になっていますが、他のユーザーから見れないほかパスが長くなっていろいろ面倒だと思うので、私はおすすめしません。  
@@ -116,6 +116,8 @@ config.default.py を config.py にコピーしてください（コピーして
 リネームでもかまいませんが、設定をミスったときのために config.default.py は取っておくことを推奨します。
 
 ### 5. Amatsukaze でバッチを登録
+
+<img src="https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/06.png" width="600px">
 
 Amatsukaze/bat/ に追加した .bat ファイルはAmatsukazeに自動で認識され、頭に "実行前_"と付くものは実行前バッチとして、"実行後_"と付くものは実行後バッチとして登録が可能になります。
 プロファイルタブから使用するプロファイルを選んで実行前バッチと実行後バッチの項目に 実行前_AmatsukazeNotifier.bat と 実行後_AmatsukazeNotifier.bat を登録して適用してください。
@@ -269,22 +271,22 @@ LINE Notify へ通知しない場合は必要ありませんが、後述する T
 [LINE Notify](https://notify-bot.line.me/ja/) にアクセスし、右上の \[ログイン] から LINE へログインします（いつも使っているアカウントで構いません）。  
 ログインできたら、右上のメニューから \[マイページ] に移動します。
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88371969-06407280-cdd0-11ea-9e70-ed5b796d79e0.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/07.png)
 
 下の方にある「アクセストークンの発行(開発者向け)」へ行き、 \[トークンを発行する] をクリックします。
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88370184-81a02500-cdcc-11ea-8147-772f3ceb9662.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/08.png)
 
 トークン名は LINE Notify で通知が送られてきたときに \[AmatsukazeNotifier] のように付加される文字列です（ LINE Notify 全体でユニークである必要はないらしい）。  
 通知を送信するトークルームは \[1:1 で LINE Notify から通知を受ける] か、任意のグループ LINE を選択してください。  
 ここでは「1:1 で LINE Notify から通知を受ける」（現在ログインしているアカウントに届く）を選択します。 
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88371432-fbd1a900-cdce-11ea-8e9f-2067360c32b9.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/09.png)
 
  \[発行する] をクリックするとアクセストークンが発行されるので、 \[コピー] をクリックしてクリップボードにコピーします。  
 アクセストークンはこの画面を閉じると二度と表示されない（一度解除し同じ内容でもう一度発行することはできるがアクセストークンは変わる）ので、どこかにメモしておくと良いでしょう。
 
-![Screenshot](https://user-images.githubusercontent.com/39271166/88371444-fecc9980-cdce-11ea-8293-b9a8bf765422.png)
+![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/10.png)
 
 画面を閉じると LINE Notify と設定したトークルームが連携されているはずです。
 
@@ -310,7 +312,7 @@ EDCBNotifierの作者tsukumijima氏のツールである、[Twitter API のア�
 Twitter API アプリを作成すると、Twitter API を使うために必要な Consumer Key・Consumer Secret を取得できます。   
 すでに Twitter API アプリを作成している場合は飛ばすこともできますが、via が被るので新しく作ってもいいと思います。開発者登録のときとは異なり、審査はありません。
 
-![ScreenShot](https://user-images.githubusercontent.com/39271166/88845529-444df400-d21f-11ea-89db-4243e077e622.png)
+![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/11.png)
 
 #### App name（必須・重複不可らしい）
 
@@ -371,18 +373,18 @@ Twitter API アプリを作成すると、Twitter API を使うために必要�
 
 ダイレクトメッセージを送信するため Permissions タブに移動し、\[Edit] をクリックします。
 
-![ScreenShot](https://user-images.githubusercontent.com/39271166/88842998-5f1e6980-d21b-11ea-93ec-80e9caeb2754.png)
+![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/12.png)
 
 **Access permission** を **Read, write, and Direct Messages** に設定し、\[Save] で保存します。  
 こうすることでツイートの読み取り・ツイートの書き込みなどに加え、ダイレクトメッセージを送信できるようになります。  
 Permissions を変更すると今までに取得した Access Token・Access Token Secret が無効になります。注意してください。
 
-![ScreenShot](https://user-images.githubusercontent.com/39271166/88842886-2f6f6180-d21b-11ea-8265-b2a67653e674.png)
+![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/13.png)
 
 Keys and tokens タブに移動し、API Key と API Key Secret をクリップボードにコピーします。  
 API Key が Consumer Key 、API Key Secret が Consumer Secret にあたります。  
 
-![ScreenShot](https://user-images.githubusercontent.com/39271166/88843951-de606d00-d21c-11ea-8b77-9ecdad694470.png)
+![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/14.png)
 
 開発者登録したアカウントで利用する場合は、**Access token & access token secret** の横の \[Generate]をクリックし、Access Token・Access Token Secret を生成します。  
 Access Token・Access Token Secret が表示されるので、クリップボードにコピーします。
