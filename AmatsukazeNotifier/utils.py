@@ -63,7 +63,7 @@ class Utils:
             "OUT_SIZE": environ.get("OUT_SIZE", macro_default), #出力ファイルのサイズ（バイト単位）
             "LOGO_FILE": environ.get("LOGO_FILE", macro_default), #ロゴファイルパス
             "NUM_INCIDENT": environ.get("NUM_INCIDENT", macro_default), #インシデント数
-            "JJSON_PATH": environ.get("JSON_PATH", macro_default), #出力JSONパス
+            "JSON_PATH": environ.get("JSON_PATH", macro_default), #出力JSONパス
             "LOG_PATH": environ.get("LOG_PATH", macro_default), #ログファイルパス
             
             #独自マクロ
@@ -79,8 +79,8 @@ class Utils:
             # Amatsukazeからジャンル情報が来ない事がある
             #"Genre": environ.get("ITEM_GENRE", macro_default).split(" - ")[0], #番組のジャンル
             #"Genre2": environ.get("ITEM_GENRE", macro_default).split(" - ")[len(environ.get("ITEM_GENRE", macro_default).split(" - "))-1], #番組の詳細ジャンル
-            "Genre": tsinfo[4].replace("\u3000"," ") #ジャンル 〔詳細ジャンル〕,
-            "SubTitle": tsinfo[3], #サブタイトル
+            "Genre": tsinfo[4].replace("\u3000"," "), #ジャンル 〔詳細ジャンル〕,
+            "SubTitle": tsinfo[3].replace("\u3000"," "), #サブタイトル
             
             "HashTag": self.get_hashtag(jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False)), 
             "ServiceNameHankaku": jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False), #サービス名（チャンネル名） 英数半角

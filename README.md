@@ -261,7 +261,7 @@ Amatsukaze の環境変数と同じマクロ
 - \$OUT_DURATION\$… 出力ファイルの再生時間の秒トータル（30分なら1800）
 - \$LOGO_FILE\$ … ロゴファイルパス
 - \$NUM_INCIDENT\$ … インシデント数
-- \$JJSON_PATH\$ … 出力JSONパス
+- \$JSON_PATH\$ … 出力JSONパス
 - \$LOG_PATH\$ … ログファイルパス
 
 AmatsukazeNotifier 独自マクロ
