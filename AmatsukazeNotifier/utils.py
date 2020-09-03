@@ -299,7 +299,7 @@ class Utils:
         duration = p.stdout.decode("shift-jis") #HH/MM/SS
         
         i = subprocess.run([rplsinfo, ts_path, "-i"], stdout=subprocess.PIPE)
-        info = p.stdout.decode("shift-jis").replace("\n","")
+        info = i.stdout.decode("shift-jis").replace("\r\n","")
         
         #datetime,timedelta型に変換
         RecStart = datetime.datetime.strptime((date.strip()+" "+time.strip()), '%Y/%m/%d %H:%M:%S')
