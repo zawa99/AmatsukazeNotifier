@@ -133,7 +133,7 @@ class Utils:
             "ODSS": str(self.Seconds_to_HMS(OutDurationSeconds)[3]).zfill(2),
             "ODS": str(self.Seconds_to_HMS(OutDurationSeconds)[3]),
 
-            "InSizeByte": str(int(environ.get("IN_SIZE", "0"))), #エンコードで圧縮したサイズ（バイト単位）
+            "InSizeByte": str(int(environ.get("IN_SIZE", "0"))), #変換前のサイズ（バイト単位）
             "InSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024))), #変換前のサイズ（KB単位）
             "InSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024))), #変換前のサイズ（MB単位）
             "InSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024*1024))), #変換前のサイズ（GB単位）少数第一位まで
