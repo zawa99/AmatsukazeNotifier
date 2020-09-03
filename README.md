@@ -202,7 +202,6 @@ EDCB 準拠マクロ
 - \$SID16\$ … ServiceID 16進数
 - \$ServiceName\$ … サービス名(チャンネル名) \$SERVICE_NAME\$と同じ
 - \$Genre\$ … 番組のジャンル
-- \$Genre2\$ … 番組の詳細ジャンル
 - \$SDYYYY\$ … 番組開始日の年4桁
 - \$SDYY\$ … 番組開始日の年2桁
 - \$SDMM\$ … 番組開始日の月2桁固定

@@ -76,8 +76,10 @@ class Utils:
             "SID10": environ.get("SERVICE_ID", macro_default), #ServiceID 10進数
             "SID16": hex(int(environ.get("SERVICE_ID", macro_default))), #ServiceID 16進数
             "ServiceName": environ.get("SERVICE_NAME", macro_default), #サービス名
-            "Genre": environ.get("ITEM_GENRE", macro_default).split(" - ")[0], #番組のジャンル
-            "Genre2": environ.get("ITEM_GENRE", macro_default).split(" - ")[len(environ.get("ITEM_GENRE", macro_default).split(" - "))-1], #番組の詳細ジャンル
+            # Amatsukazeからジャンル情報が来ない事がある
+            #"Genre": environ.get("ITEM_GENRE", macro_default).split(" - ")[0], #番組のジャンル
+            #"Genre2": environ.get("ITEM_GENRE", macro_default).split(" - ")[len(environ.get("ITEM_GENRE", macro_default).split(" - "))-1], #番組の詳細ジャンル
+            "Genre": tsinfo[4].replace("\u3000"," ") #ジャンル 〔詳細ジャンル〕,
             "SubTitle": tsinfo[3], #サブタイトル
             
             "HashTag": self.get_hashtag(jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False)), 
@@ -301,14 +303,17 @@ class Utils:
         i = subprocess.run([rplsinfo, ts_path, "-i"], stdout=subprocess.PIPE)
         info = i.stdout.decode("shift-jis").replace("\r\n","")
         
+        g = subprocess.run([rplsinfo, ts_path, "-g"], stdout=subprocess.PIPE)
+        genre = g.stdout.decode("shift-jis").replace("\r\n","")
+        
         #datetime,timedelta型に変換
         RecStart = datetime.datetime.strptime((date.strip()+" "+time.strip()), '%Y/%m/%d %H:%M:%S')
         DurationTime = datetime.timedelta(hours=int(duration[:2]), minutes=int(duration[3:5]), seconds=int(duration[6:8]))
         RecEnd = RecStart + DurationTime
-    
+        
 
         #放送開始時刻(datetime)、放送時間(timedelta)、放送終了時刻(timedelta)、曜日リスト(list)を返す
-        return RecStart, DurationTime, RecEnd, info
+        return RecStart, DurationTime, RecEnd, info, genre
         
         
 
