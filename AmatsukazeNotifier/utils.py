@@ -24,29 +24,13 @@ class Utils:
         tsRecStart = tsinfo[0]
         tsDuration = tsinfo[1]
         tsRecEnd = tsinfo[2]
-        ts_w_list = tsinfo[3]
         
         
 
         #AmatsukazeがCMと判定してカットした秒数を取得
+        InDurationSeconds = int('{:.0f}'.format(float(environ.get("IN_DURATION", "0"))))
+        OutDurationSeconds = int('{:.0f}'.format(float(environ.get("OUT_DURATION", "0"))))
         CutDurationSeconds = int('{:.0f}'.format(float(environ.get("IN_DURATION", "0"))-float(environ.get("OUT_DURATION", "0"))))
-
-        if CutDurationSeconds>=3600: #1時間以上
-            CutDuration = str(CutDurationSeconds//60)+":"+((CutDurationSeconds%60)//60).zfill(2)+":"+((CutDurationSeconds%60)%60).zfill(2)
-            CutDurationH = str(CutDurationSeconds//60)
-            CutDurationM = str((CutDurationSeconds%60)//60)
-            CutDurationS = str((CutDurationSeconds%60)%60)
-            
-        elif CutDurationSeconds<60: #1分未満
-            CutDuration = str(CutDurationSeconds)+"秒"
-            CutDurationH = str(0)
-            CutDurationM = str(0)
-            CutDurationS = str(CutDurationSeconds)
-        else: #1分以上1時間未満
-            CutDuration = str(CutDurationSeconds//60)+"分"+str(CutDurationSeconds%60)+"秒"
-            CutDurationH = str(0)
-            CutDurationM = str(CutDurationSeconds//60)
-            CutDurationS = str(CutDurationSeconds%60)
         
 
         macro_table = {
@@ -93,7 +77,7 @@ class Utils:
             "SDM": str(int(tsRecStart.strftime("%m"))), #開始日の月
             "SDDD": tsRecStart.strftime("%d"), #開始日の日2桁固定
             "SDD": str(int(tsRecStart.strftime("%d"))), #開始日の日
-            "SDW": ts_w_list[tsRecStart.weekday()], #開始日の曜日
+            "SDW": self.get_weekday(tsRecStart), #開始日の曜日
             "STHH": tsRecStart.strftime("%H"), #開始時刻の時2桁固定
             "STH": str(int(tsRecStart.strftime("%H"))), #開始時刻の時
             "STMM": tsRecStart.strftime("%M"), #開始時刻の分2桁固定
@@ -107,30 +91,56 @@ class Utils:
             "EDM": str(int(tsRecEnd.strftime("%m"))), #終了日の月
             "EDDD": tsRecEnd.strftime("%d"), #終了日の日2桁固定
             "EDD": str(int(tsRecEnd.strftime("%d"))), #終了日の日
-            "EDW": ts_w_list[tsRecEnd.weekday()], #終了日の曜日
+            "EDW": self.get_weekday(tsRecEnd), #終了日の曜日
             "ETHH": tsRecEnd.strftime("%H"), #終了時刻の時2桁固定
             "ETH": str(int(tsRecEnd.strftime("%H"))), #終了時刻の時
             "ETMM": tsRecEnd.strftime("%M"), #終了時刻の分2桁固定
             "ETM": str(int(tsRecEnd.strftime("%M"))), #終了時刻の分
             "ETSS": tsRecEnd.strftime("%S"), #終了時刻の秒2桁固定
             "ETS": str(int(tsRecEnd.strftime("%S"))), #終了時刻の秒
-            #"DUHH": #番組総時間の時2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            #"DUH": #番組総時間の時（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            #"DUMM": #番組総時間の分2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            #"DUM": #番組総時間の分（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            #"DUSS": #番組総時間の秒2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            #"DUS" #番組総時間の秒（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUHH": str(self.Seconds_to_HMS(tsDuration.seconds)[1]).zfill(2), #番組総時間の時2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUH": str(self.Seconds_to_HMS(tsDuration.seconds)[1]), #番組総時間の時（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUMM": str(self.Seconds_to_HMS(tsDuration.seconds)[2]).zfill(2), #番組総時間の分2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUM": str(self.Seconds_to_HMS(tsDuration.seconds)[2]), #番組総時間の分（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUSS": str(self.Seconds_to_HMS(tsDuration.seconds)[3]).zfill(2), #番組総時間の秒2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
+            "DUS": str(self.Seconds_to_HMS(tsDuration.seconds)[3]), #番組総時間の秒（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
             
             #実行後のみ
-            "CDTime": str(datetime.timedelta(seconds=CutDurationSeconds)),
+            
+            #AmatsukazeがCMと判定してカットした時間
             "CDSecs": str(CutDurationSeconds), #AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
-            "CDHH": CutDurationH.zfill(2),
-            "CDH": CutDurationH,
-            "CDMM": CutDurationM.zfill(2),
-            "CDM": CutDurationM,
-            "CDSS": CutDurationS.zfill(2),
-            "CDS": CutDurationS,
-            "CutDur": CutDuration, #AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
+            "CDHH": str(self.Seconds_to_HMS(CutDurationSeconds)[1]).zfill(2),
+            "CDH": str(self.Seconds_to_HMS(CutDurationSeconds)[1]),
+            "CDMM": str(self.Seconds_to_HMS(CutDurationSeconds)[2]).zfill(2),
+            "CDM": str(self.Seconds_to_HMS(CutDurationSeconds)[2]),
+            "CDSS": str(self.Seconds_to_HMS(CutDurationSeconds)[3]).zfill(2),
+            "CDS": str(self.Seconds_to_HMS(CutDurationSeconds)[3]),
+            "CutDur": self.Seconds_to_HMS(CutDurationSeconds)[0], #AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
+            
+            #変換前の再生時間
+            "IDHH": str(self.Seconds_to_HMS(InDurationSeconds)[1]).zfill(2),
+            "IDH": str(self.Seconds_to_HMS(InDurationSeconds)[1]),
+            "IDMM": str(self.Seconds_to_HMS(InDurationSeconds)[2]).zfill(2),
+            "IDM": str(self.Seconds_to_HMS(InDurationSeconds)[2]),
+            "IDSS": str(self.Seconds_to_HMS(InDurationSeconds)[3]).zfill(2),
+            "IDS": str(self.Seconds_to_HMS(InDurationSeconds)[3]),
+            
+            #変換後の再生時間
+            "ODHH": str(self.Seconds_to_HMS(OutDurationSeconds)[1]).zfill(2),
+            "ODH": str(self.Seconds_to_HMS(OutDurationSeconds)[1]),
+            "ODMM": str(self.Seconds_to_HMS(OutDurationSeconds)[2]).zfill(2),
+            "ODM": str(self.Seconds_to_HMS(OutDurationSeconds)[2]),
+            "ODSS": str(self.Seconds_to_HMS(OutDurationSeconds)[3]).zfill(2),
+            "ODS": str(self.Seconds_to_HMS(OutDurationSeconds)[3]),
+
+            "InSizeByte": str(int(environ.get("IN_SIZE", "0"))), #エンコードで圧縮したサイズ（バイト単位）
+            "InSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024))), #変換前のサイズ（KB単位）
+            "InSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024))), #変換前のサイズ（MB単位）
+            "InSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024*1024))), #変換前のサイズ（GB単位）少数第一位まで
+            "OutSizeByte": str(int(environ.get("IN_SIZE", "0"))), #変換後のサイズ（バイト単位）
+            "OutSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024))), #変換後のサイズ（KB単位）
+            "OutSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024))), #変換後のサイズ（MB単位）
+            "OutSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024*1024))), #変換後のサイズ（GB単位）少数第一位まで
             "CompressSizeByte": str(int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0"))), #エンコードで圧縮したサイズ（バイト単位）
             "CompressSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0")))/(1024))), #エンコードで圧縮したサイズ（KB単位）
             "CompressSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0")))/(1024*1024))), #エンコードで圧縮したサイズ（MB単位）
@@ -246,7 +256,7 @@ class Utils:
 
 
     #TSファイルから番組情報の一部を取得
-    def get_ts_info(self, ts_path):
+    def get_ts_info(self, ts_path,):
         #rplsinfoのパスを取得
         rplsinfo = os.path.join(os.getcwd(),"AmatsukazeNotifier","rplsinfo.exe")
         print("rplsinfo: "+rplsinfo)
@@ -258,13 +268,15 @@ class Utils:
         duration = p.stdout.decode("shift-jis") #HH/MM/SS
         
         #datetime.weekday()から曜日を参照するリスト
-        w_list = ['月', '火', '水', '木', '金', '土', '日']
         RecStart = datetime.datetime.strptime((date.strip()+" "+time.strip()), '%Y/%m/%d %H:%M:%S')
         DurationTime = datetime.timedelta(hours=int(duration[:2]), minutes=int(duration[3:5]), seconds=int(duration[6:8]))
         RecEnd = RecStart + DurationTime
+    
 
         #放送開始時刻(datetime)、放送時間(timedelta)、放送終了時刻(timedelta)、曜日リスト(list)を返す
-        return RecStart, DurationTime, RecEnd, w_list
+        return RecStart, DurationTime, RecEnd
+        
+        
 
     # 実行時刻
     def get_exection_time(self):
@@ -281,5 +293,31 @@ class Utils:
     # バージョン情報
     def get_version(self):
 
-        return '1.0.0'
+        return '1.0.0 alpha'
 
+    #datetimeから曜日
+    def get_weekday(self, in_datetime):
+        weeklist = ['月', '火', '水', '木', '金', '土', '日']
+        return weeklist[in_datetime.weekday()]
+    
+    # timedeltaから時間を取得
+    def Seconds_to_HMS(self, totalseconds):
+        if totalseconds>=3600: #1時間以上
+            H = totalseconds//60
+            M = (totalseconds%60)//60
+            S = (totalseconds%60)%60
+            timejp = str(H)+"時間"+str(M)+"分"+str(S)+"秒"
+            
+        elif totalseconds<60: #1分未満
+            H = 0
+            M = 0
+            S = totalseconds
+            timejp = str(S)+"秒"
+
+        else: #1分以上1時間未満
+            H = 0
+            M = totalseconds//60
+            S = totalseconds%60
+            timejp = str(M)+"分"+str(S)+"秒"
+
+        return timejp, H, M, S

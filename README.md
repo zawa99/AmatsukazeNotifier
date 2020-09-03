@@ -166,7 +166,7 @@ False に設定した場合は、ログを保存しません。通常通りコ�
 通知するメッセージの設定は config.py の \[メッセージ] セクションにあります。
 
 マクロの形式は EDCBNotifier とは異なるので注意。
-Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/Amatsukaze/wiki/%E3%83%90%E3%83%83%E3%83%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%AE%9F%E8%A1%8C%E6%A9%9F%E8%83%BD)に環境変数として記載されているものは前後に/$をつければ基本的にそのまま使えます。
+Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/Amatsukaze/wiki/%E3%83%90%E3%83%83%E3%83%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%AE%9F%E8%A1%8C%E6%A9%9F%E8%83%BD)に環境変数として記載されているものは前後に\$をつければ基本的にそのまま使えます。
 実行後バッチでしか利用できないものもあるので注意してください。
 
 
@@ -174,82 +174,101 @@ Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/A
 
 #### 実行前、実行後共通
 Amatsukazeの環境変数と同じマクロ
-- /$ITEM_ID/$ … アイテムに一意に振られるID。追加時、実行前、実行後で同じアイテムを追跡できる。Amatsukazeを再起動するとIDが変わるので注意。
-- /$IN_PATH/$ … 入力ファイルパス
-- /$OUT_PATH/$ … 出力ファイルパス（拡張子を含まない）
-- /$SERVICE_ID/$ … サービスID（チャンネルID）
-- /$SERVICE_NAME/$ … サービス名（チャンネル名）
-- /$TS_TIME/$ … TSファイルの時刻
-- /$ITEM_MODE/$ … モード。Batch…通常 AutoBatch…自動追加 Test…テスト DrcsCheck…DRCSチェック CMCheck…CMチェック
-- /$ITEM_PRIORITY/$ … アイテム優先度(1-5)
-- /$ITEM_GENRE/$ … 番組ジャンル
-- /$IMAGE_WIDTH/$ … 映像幅
-- /$IMAGE_HEIGHT/$ … 映像高さ
-- /$EVENT_NAME/$ … 番組名
-- /$TAG/$ … タグ（セミコロン区切り）
-- /$PROFILE_NAME/$ … プロファイル名
+- \$ITEM_ID\$ … アイテムに一意に振られるID。追加時、実行前、実行後で同じアイテムを追跡できる。Amatsukazeを再起動するとIDが変わるので注意。
+- \$IN_PATH\$ … 入力ファイルパス
+- \$OUT_PATH\$ … 出力ファイルパス（拡張子を含まない）
+- \$SERVICE_ID\$ … サービスID（チャンネルID）
+- \$SERVICE_NAME\$ … サービス名（チャンネル名）
+- \$TS_TIME\$ … TSファイルの時刻
+- \$ITEM_MODE\$ … モード。Batch…通常 AutoBatch…自動追加 Test…テスト DrcsCheck…DRCSチェック CMCheck…CMチェック
+- \$ITEM_PRIORITY\$ … アイテム優先度(1-5)
+- \$ITEM_GENRE\$ … 番組ジャンル
+- \$IMAGE_WIDTH\$ … 映像幅
+- \$IMAGE_HEIGHT\$ … 映像高さ
+- \$EVENT_NAME\$ … 番組名
+- \$TAG\$ … タグ（セミコロン区切り）
+- \$PROFILE_NAME\$ … プロファイル名
 
 独自マクロ
-- /$SDYYYY/$ … 番組開始日の年4桁
-- /$SDYY/$ … 番組開始日の年2桁
-- /$SDMM/$ … 番組開始日の月2桁固定
-- /$SDM/$ … 番組開始日の月
-- /$SDDD/$ … 番組f開始日の日2桁固定
-- /$SDD/$ … 番組開始日の日
-- /$SDW/$ … 番組開始日の曜日
-- /$STHH/$ … 番組開始時刻の時2桁固定
-- /$STH/$ … 番組開始時刻の時
-- /$STMM/$ … 番組開始時刻の分2桁固定
-- /$STM/$ … 番組開始時刻の分
-- /$STSS/$ … 番組開始時刻の秒2桁固定
-- /$STS/$… 番組開始時刻の秒
-- /$EDYYYY/$ … 番組終了日の年4桁
-- /$EDYY/$ … 番組終了日の年2桁
-- /$EDYY/$ … 番組終了日の年4桁
-- /$EDMM/$ … 番組終了日の月2桁固定
-- /$EDM/$ … 番組終了日の月
-- /$EDDD/$ … 番組終了日の日2桁固定
-- /$EDD/$ … 番組終了日の日
-- /$EDW/$ … 番組終了日の曜日
-- /$ETHH/$ … 番組終了時刻の時2桁固定
-- /$ETH/$ … 番組終了時刻の時
-- /$ETMM/$ … 番組終了時刻の分2桁固定
-- /$ETM/$ … 番組終了時刻の分
-- /$ETSS/$ … 番組終了時刻の秒2桁固定
-- /$ETS/$ … 番組終了時刻の秒
-- /$HashTag/$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
-- /$ServiceNameHankaku/$ … サービス名（チャンネル名） 英数半角
-- /$EventNameHankaku/$ … 番組名 英数半角
+- \$SDYYYY\$ … 番組開始日の年4桁
+- \$SDYY\$ … 番組開始日の年2桁
+- \$SDMM\$ … 番組開始日の月2桁固定
+- \$SDM\$ … 番組開始日の月
+- \$SDDD\$ … 番組f開始日の日2桁固定
+- \$SDD\$ … 番組開始日の日
+- \$SDW\$ … 番組開始日の曜日
+- \$STHH\$ … 番組開始時刻の時2桁固定
+- \$STH\$ … 番組開始時刻の時
+- \$STMM\$ … 番組開始時刻の分2桁固定
+- \$STM\$ … 番組開始時刻の分
+- \$STSS\$ … 番組開始時刻の秒2桁固定
+- \$STS\$… 番組開始時刻の秒
+- \$EDYYYY\$ … 番組終了日の年4桁
+- \$EDYY\$ … 番組終了日の年2桁
+- \$EDYY\$ … 番組終了日の年4桁
+- \$EDMM\$ … 番組終了日の月2桁固定
+- \$EDM\$ … 番組終了日の月
+- \$EDDD\$ … 番組終了日の日2桁固定
+- \$EDD\$ … 番組終了日の日
+- \$EDW\$ … 番組終了日の曜日
+- \$ETHH\$ … 番組終了時刻の時2桁固定
+- \$ETH\$ … 番組終了時刻の時
+- \$ETMM\$ … 番組終了時刻の分2桁固定
+- \$ETM\$ … 番組終了時刻の分
+- \$ETSS\$ … 番組終了時刻の秒2桁固定
+- \$ETS\$ … 番組終了時刻の秒
+- \$HashTag\$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
+- \$ServiceNameHankaku\$ … サービス名（チャンネル名） 英数半角
+- \$EventNameHankaku\$ … 番組名 英数半角
 
 
 
 #### 実行後のみで有効
 Amatsukazeの環境変数と同じマクロ
-- /$SUCCESS/$ … 成功=1,失敗=0
-- /$ERROR_MESSAGE/$ … エラーメッセージ（失敗したときのみ）
-- /$IN_DURATION/$ … 入力ファイルの再生時間
-- /$OUT_DURATION/$… 出力ファイルの再生時間
-- /$IN_SIZE/$… 入力ファイルのサイズ（バイト単位）
-- /$OUT_SIZE/$ … 出力ファイルのサイズ（バイト単位）
-- /$LOGO_FILE/$ … ロゴファイルパス
-- /$NUM_INCIDENT/$ … インシデント数
-- /$JJSON_PATH/$ … 出力JSONパス
-- /$LOG_PATH/$ … ログファイルパス
+- \$SUCCESS\$ … 成功=1,失敗=0
+- \$ERROR_MESSAGE\$ … エラーメッセージ（失敗したときのみ）
+- \$IN_DURATION\$ … 入力ファイルの再生時間
+- \$OUT_DURATION\$… 出力ファイルの再生時間
+- \$IN_SIZE\$… 入力ファイルのサイズ（バイト単位）
+- \$OUT_SIZE\$ … 出力ファイルのサイズ（バイト単位）
+- \$LOGO_FILE\$ … ロゴファイルパス
+- \$NUM_INCIDENT\$ … インシデント数
+- \$JJSON_PATH\$ … 出力JSONパス
+- \$LOG_PATH\$ … ログファイルパス
 
 独自マクロ
-- /$CDTime/$ … AmatsukazeがCMと判定してカットした時間（HH:MM:SS)
-- /$CDSecs/$ … AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
-- /$CDHH/$ … AmatsukazeがCMと判定してカットした時間の時2桁固定
-- /$CDH/$ … AmatsukazeがCMと判定してカットした時間の時
-- /$CDMM/$ … AmatsukazeがCMと判定してカットした時間の分2桁固定
-- /$CDM/$ … AmatsukazeがCMと判定してカットした時間の分
-- /$CDSS/$ … AmatsukazeがCMと判定してカットした時間の秒2桁固定
-- /$CDS/$ … AmatsukazeがCMと判定してカットした時間の秒
-- /$CutDur/$ … AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
-- /$CompressSizeByte/$ … エンコードで圧縮したサイズ（バイト単位）
-- /$CompressSizeKB/$ … エンコードで圧縮したサイズ（KB単位）
-- /$CompressSizeMB/$ … stエンコードで圧縮したサイズ（MB単位）
-- /$CompressSizeGB/$ … エンコードで圧縮したサイズ（GB単位）少数第一位まで
+- \$CDSecs\$ … AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
+- \$CDHH\$ … AmatsukazeがCMと判定してカットした時間の時間2桁固定
+- \$CDH\$ … AmatsukazeがCMと判定してカットした時間の時間
+- \$CDMM\$ … AmatsukazeがCMと判定してカットした時間の分2桁固定
+- \$CDM\$ … AmatsukazeがCMと判定してカットした時間の分
+- \$CDSS\$ … AmatsukazeがCMと判定してカットした時間の秒2桁固定
+- \$CDS\$ … AmatsukazeがCMと判定してカットした時間の秒
+- \$CutDur\$ … AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
+- \$IDHH\$ … 変換前の再生時間の時間2桁固定
+- \$IDH\$ … 変換前の再生時間の時間
+- \$IDMM\$ … 変換前の再生時間の分2桁固定
+- \$IDM\$ … 変換前の再生時間の分
+- \$IDSS\$ … 変換前の再生時間の秒2桁固定
+- \$IDS\$ … 変換前の再生時間の秒
+- \$ODHH\$ … 変換後の再生時間の時間2桁固定
+- \$ODH\$ … 変換後の再生時間の時間
+- \$ODMM\$ … 変換後の再生時間の分2桁固定
+- \$ODM\$ … 変換後の再生時間の分
+- \$ODSS\$ … 変換後の再生時間の秒2桁固定
+- \$ODS\$ … 変換後の再生時間の秒
+- \$InSizeByte\$ … 変換前のサイズ（バイト単位）
+- \$InSizeKB\$ … 変換前のサイズ（KB単位）
+- \InSizeMB\$ … 変換前のサイズ（MB単位）
+- \$InSizeGB\$ … 変換前のサイズ（GB単位）少数第一位まで
+- \$OutSizeByte\$ … 変換後のサイズ（バイト単位）
+- \$OutSizeKB\$ … 変換後のサイズ（KB単位）
+- \OutSizeMB\$ … 変換後のサイズ（MB単位）
+- \$OutSizeGB\$ … 変換後のサイズ（GB単位）少数第一位まで
+- \$CompressSizeByte\$ … エンコードで圧縮したサイズ（バイト単位）
+- \$CompressSizeKB\$ … エンコードで圧縮したサイズ（KB単位）
+- \$CompressSizeMB\$ … エンコードで圧縮したサイズ（MB単位）
+- \$CompressSizeGB\$ … エンコードで圧縮したサイズ（GB単位）少数第一位まで
 
 Python の辞書 (dict) 形式で格納しているので、改行を入れる場合は文字列内に \n と入力してください。文字列は + で連結できます。  
 
