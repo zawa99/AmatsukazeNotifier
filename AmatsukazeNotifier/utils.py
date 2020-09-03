@@ -5,6 +5,7 @@ import subprocess
 import jaconv
 import datetime
 import config
+import re
 
 class Utils:
 
@@ -44,11 +45,11 @@ class Utils:
             "TS_TIME" : environ.get("TS_TIME", macro_default), #TSファイルの時刻
             "ITEM_MODE" : environ.get("ITEM_MODE", macro_default), #モード。Batch:通常 AutoBatch:自動追加 Test:テスト DrcsCheck:DRCSチェック CMCheck:CMチェック
             "ITEM_PRIORITY" : environ.get("ITEM_PRIORITY", macro_default), #アイテム優先度(1-5)
-            "ITEM_GENRE" : environ.get("ITEM_GENRE", macro_default), #番組ジャンル
+            "ITEM_GENRE" : environ.get("ITEM_GENRE", macro_default), #番組ジャンル(
             "IMAGE_WIDTH" : environ.get("IMAGE_WIDTH", macro_default), #映像幅
             "IMAGE_HEIGHT" : environ.get("IMAGE_HEIGHT", macro_default), #映像高さ
             "EVENT_NAME" : environ.get("EVENT_NAME", macro_default), #番組名
-            "TAG": environ.get("TAG", macro_default), #タグ（セミコロン区切り）
+            "TAG": environ.get("TAG", macro_default), #Amatsukazeで設定したタグ
 
             #実行前および実行後のみで有効
             "PROFILE_NAME": environ.get("PROFILE_NAME", macro_default), #プロファイル名
@@ -66,10 +67,38 @@ class Utils:
             "LOG_PATH": environ.get("LOG_PATH", macro_default), #ログファイルパス
             
             #独自マクロ
+            "InFolderPath": os.path.dirname(environ.get("IN_PATH", macro_default)), #入力ファイルのフォルダパス（最後に\はなし）（バッチのみ）
+            "InFileName": os.path.splitext(os.path.basename(environ.get("IN_PATH", macro_default)))[0], #入力ファイル名（拡張子なし）（バッチのみ）
+            "OutFolderPath": os.path.dirname(environ.get("OUT_PATH", macro_default)), #出力ファイルのフォルダパス（最後に\はなし）（バッチのみ）
+            "OutFileName": os.path.basename(environ.get("OUT_PATH", macro_default)), #出力ファイル名（拡張子なし）（バッチのみ）
+            "Title": environ.get("EVENT_NAME", macro_default), #番組名
+            "Title2": re.sub("\[.+?\]", "", environ.get("EVENT_NAME", macro_default)), #番組名（[]の括弧でくくられている部分を削除したもの）
+            "SID10": environ.get("SERVICE_ID", macro_default), #ServiceID 10進数
+            "SID16": hex(int(environ.get("SERVICE_ID", macro_default))), #ServiceID 16進数
+            "ServiceName": environ.get("SERVICE_NAME", macro_default), #サービス名
+            "Genre": environ.get("ITEM_GENRE", macro_default).split(" - ")[0], #番組のジャンル
+            "Genre2": environ.get("ITEM_GENRE", macro_default).split(" - ")[len(environ.get("ITEM_GENRE", macro_default).split(" - "))-1], #番組の詳細ジャンル
+            "SubTitle": tsinfo[3], #サブタイトル
+            
             "HashTag": self.get_hashtag(jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False)), 
             "ServiceNameHankaku": jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False), #サービス名（チャンネル名） 英数半角
-            "EventNameHankaku": jaconv.z2h(environ.get('EVENT_NAME', macro_default), digit = True, ascii = True, kana = False), #番組名 英数半角
-
+            "TitleHankaku": jaconv.z2h(environ.get('EVENT_NAME', macro_default), digit = True, ascii = True, kana = False), #番組名 英数半角
+            "Title2Hankaku": jaconv.z2h(re.sub("\[.+?\]", "", environ.get("EVENT_NAME", macro_default)), digit = True, ascii = True, kana = False), #番組名 英数半角
+            "TimeYYYY": self.time.strftime("%Y"),
+            "TimeYY": self.time.strftime("%y"),
+            "TimeMM": self.time.strftime("%m"),
+            "TimeM": str(int(self.time.strftime("%m"))),
+            "TimeDD": self.time.strftime("%d"),
+            "TimeD": str(int(self.time.strftime("%d"))),
+            "TimeW": self.get_exection_day(),
+            "TimeHH": self.time.strftime("%H"),
+            "TimeH": str(int(self.time.strftime("%H"))),
+            "TimeII": self.time.strftime("%M"),
+            "TimeI": str(int(self.time.strftime("%M"))),
+            "TimeSS": self.time.strftime("%S"),
+            "TimeS": str(int(self.time.strftime("%S"))),
+            
+            
             
             "SDYYYY": tsRecStart.strftime("%Y"), #開始日の年4桁
             "SDYY": tsRecStart.strftime("%y"), #開始日の年2桁
@@ -260,6 +289,8 @@ class Utils:
         #rplsinfoのパスを取得
         rplsinfo = os.path.join(os.getcwd(),"AmatsukazeNotifier","rplsinfo.exe")
         print("rplsinfo: "+rplsinfo)
+        
+        #時間情報を取得
         d = subprocess.run([rplsinfo, ts_path, "-d"], stdout=subprocess.PIPE)
         date = d.stdout.decode("shift-jis") #YYYY/MM/DD
         t = subprocess.run([rplsinfo, ts_path, "-t"], stdout=subprocess.PIPE)
@@ -267,14 +298,17 @@ class Utils:
         p = subprocess.run([rplsinfo, ts_path, "-p"], stdout=subprocess.PIPE)
         duration = p.stdout.decode("shift-jis") #HH/MM/SS
         
-        #datetime.weekday()から曜日を参照するリスト
+        i = subprocess.run([rplsinfo, ts_path, "-i"], stdout=subprocess.PIPE)
+        info = p.stdout.decode("shift-jis").replace("\n","")
+        
+        #datetime,timedelta型に変換
         RecStart = datetime.datetime.strptime((date.strip()+" "+time.strip()), '%Y/%m/%d %H:%M:%S')
         DurationTime = datetime.timedelta(hours=int(duration[:2]), minutes=int(duration[3:5]), seconds=int(duration[6:8]))
         RecEnd = RecStart + DurationTime
     
 
         #放送開始時刻(datetime)、放送時間(timedelta)、放送終了時刻(timedelta)、曜日リスト(list)を返す
-        return RecStart, DurationTime, RecEnd
+        return RecStart, DurationTime, RecEnd, info
         
         
 

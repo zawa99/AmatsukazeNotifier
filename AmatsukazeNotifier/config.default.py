@@ -82,13 +82,13 @@ NOTIFY_LOG = False
 NOTIFY_MESSAGE = {
 
     # 変換を開始したとき（ 実行前_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
-    'PostEncStart': '🔥 変換開始: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$',
+    'PostEncStart': '🔥 変換開始: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$\n'+'プロファイル: $PROFILE_NAME$',
 
     # 変換が成功したとき（ 実行後_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
-    'PostEncSuccess': '✅ 変換成功: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$\n'+'カット: $CutDur$ 圧縮: $CompressSizeGB$GB',
+    'PostEncSuccess': '✅ 変換成功: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$\n'+'プロファイル: $PROFILE_NAME$\n'+'カット: $CutDur$ 圧縮: $CompressSizeGB$GB',
     
     # 変換が失敗したとき（ 実行後_AmatsukazeNotifier.bat が実行されたとき）に送信するメッセージ
-    'PostEncFailed': '⚠️ 変換失敗: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $EventNameHankaku$\n'+'プロファイル: $PROFILE_NAME$'
+    'PostEncFailed': '⚠️ 変換失敗: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$ \n' + '$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$\n'+'プロファイル: $PROFILE_NAME$'
     
 
 }

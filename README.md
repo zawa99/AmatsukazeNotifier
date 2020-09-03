@@ -43,6 +43,10 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 通知するメッセージは 3 つのイベントごとに自由に変更できます。  
 設定ファイルは Python スクリプトなので、Python の知識があればメッセージをより高度にカスタマイズすることもできそうです。  
 
+
+基本的にEDCBで録画を行なった場合を想定しているので、その他のソフトを使用して録画したファイルでは正しく動作しない場合があります。
+また、AmatsukazeServerとAmatsukazeClientをそれぞれ別のマシンで動作させている場合は正しく動作しない可能性があります。
+
 ## Setup
 
 ### 1. ダウンロード・配置
@@ -165,7 +169,8 @@ False に設定した場合は、ログを保存しません。通常通りコ�
 通知イベントごとにメッセージを編集できます。  
 通知するメッセージの設定は config.py の \[メッセージ] セクションにあります。
 
-マクロの形式は EDCBNotifier とは異なるので注意。
+EDCBNotifier で使えても AmatsukazeNotifierでは使えないマクロもあるので注意。
+独自のマクロも多くあります。
 Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/Amatsukaze/wiki/%E3%83%90%E3%83%83%E3%83%81%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%AE%9F%E8%A1%8C%E6%A9%9F%E8%83%BD)に環境変数として記載されているものは前後に\$をつければ基本的にそのまま使えます。
 実行後バッチでしか利用できないものもあるので注意してください。
 
@@ -173,7 +178,7 @@ Amatsukaze の[バッチファイル実行機能](https://github.com/nekopanda/A
 使用可能マクロ一覧
 
 #### 実行前、実行後共通
-Amatsukazeの環境変数と同じマクロ
+Amatsukaze の環境変数と同じマクロ
 - \$ITEM_ID\$ … アイテムに一意に振られるID。追加時、実行前、実行後で同じアイテムを追跡できる。Amatsukazeを再起動するとIDが変わるので注意。
 - \$IN_PATH\$ … 入力ファイルパス
 - \$OUT_PATH\$ … 出力ファイルパス（拡張子を含まない）
@@ -182,14 +187,22 @@ Amatsukazeの環境変数と同じマクロ
 - \$TS_TIME\$ … TSファイルの時刻
 - \$ITEM_MODE\$ … モード。Batch…通常 AutoBatch…自動追加 Test…テスト DrcsCheck…DRCSチェック CMCheck…CMチェック
 - \$ITEM_PRIORITY\$ … アイテム優先度(1-5)
-- \$ITEM_GENRE\$ … 番組ジャンル
+- \$ITEM_GENRE\$ … 番組ジャンル （[ジャンル] - [詳細ジャンル] の形式 例: アニメ／特撮 - 国内アニメ）
 - \$IMAGE_WIDTH\$ … 映像幅
 - \$IMAGE_HEIGHT\$ … 映像高さ
 - \$EVENT_NAME\$ … 番組名
-- \$TAG\$ … タグ（セミコロン区切り）
+- \$TAG\$ … Amatsukaze で設定したタグ
 - \$PROFILE_NAME\$ … プロファイル名
 
-独自マクロ
+EDCB 準拠マクロ
+- \$Title\$ … 番組名 \$EVENT_NAME\$と同じ
+- \$Title2\$ … 番組名（[]の括弧でくくられている部分を削除したもの）
+- \$SubTitle\$ … サブタイトル
+- \$SID10\$ … ServiceID 10進数 \$SERVICE_ID\$と同じ
+- \$SID16\$ … ServiceID 16進数
+- \$ServiceName\$ … サービス名(チャンネル名) \$SERVICE_NAME\$と同じ
+- \$Genre\$ … 番組のジャンル
+- \$Genre2\$ … 番組の詳細ジャンル
 - \$SDYYYY\$ … 番組開始日の年4桁
 - \$SDYY\$ … 番組開始日の年2桁
 - \$SDMM\$ … 番組開始日の月2桁固定
@@ -216,14 +229,33 @@ Amatsukazeの環境変数と同じマクロ
 - \$ETM\$ … 番組終了時刻の分
 - \$ETSS\$ … 番組終了時刻の秒2桁固定
 - \$ETS\$ … 番組終了時刻の秒
+
+EDCBNotifier 準拠マクロ
 - \$HashTag\$ … 放送局名から取得したハッシュタグ (ハッシュタグは utils.py の get_hashtag() メソッドで定義) 
 - \$ServiceNameHankaku\$ … サービス名（チャンネル名） 英数半角
 - \$EventNameHankaku\$ … 番組名 英数半角
+- \$TitleHankaku\$ … $Title$（番組タイトル）の英数字を半角に変換したもの
+- \$Title2Hankaku\$ … $Title2$（番組タイトル・[]で囲まれている部分を削除したもの）の英数字を半角に変換したもの
+- \$TimeYYYY\$ … 実行時刻の上2桁付き西暦年 (ex: 2020 (年)) $TimeYY$ … 実行時刻の上2桁なし西暦年 (ex: 20 (年))
+- \$TimeMM\$ … 実行時刻の2桁固定の月 (ex: 07 (月)) $TimeM$ … 実行時刻の月 (ex: 7 (月))
+- \$TimeDD\$ … 実行時刻の2桁固定の日 (ex: 09 (日)) $TimeD$ … 実行時刻の日 (ex: 9 (日))
+- \$TimeW\$ … 実行時刻の曜日 (ex: 火 (曜日))
+- \$TimeHH\$ … 実行時刻の2桁固定の時 (24時間) (ex: 06 (時)) $TimeH$ … 実行時刻の日 (ex: 6 (時))
+- \$TimeII\$ … 実行時刻の2桁固定の分 (ex: 08 (分)) $TimeI$ … 実行時刻の分 (ex: 8 (分))
+- \$TimeSS\$ … 実行時刻の2桁固定の秒 (ex: 02 (秒)) $TimeS$ … 実行時刻の分 (ex: 2 (秒))
+
+AmatsukazeNotifier 独自マクロ
+- \$InFolderPath\$ … 入力ファイルのフォルダパス（最後に\はなし）（バッチのみ）
+- \$InFileName\$ … 入力ファイル名（拡張子なし）（バッチのみ）
+- \$OutFolderPath\$ … 出力ファイルのフォルダパス（最後に\はなし）（バッチのみ）
+- \$OutFileName\$ … 出力ファイル名（拡張子なし）（バッチのみ）
+
+
 
 
 
 #### 実行後のみで有効
-Amatsukazeの環境変数と同じマクロ
+Amatsukaze の環境変数と同じマクロ
 - \$SUCCESS\$ … 成功=1,失敗=0
 - \$ERROR_MESSAGE\$ … エラーメッセージ（成功時でも出る場合がある）
 - \$IN_DURATION\$ … 入力ファイルの再生時間の秒トータル（30分なら1800）
@@ -233,7 +265,7 @@ Amatsukazeの環境変数と同じマクロ
 - \$JJSON_PATH\$ … 出力JSONパス
 - \$LOG_PATH\$ … ログファイルパス
 
-独自マクロ
+AmatsukazeNotifier 独自マクロ
 - \$CDSecs\$ … AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
 - \$CDHH\$ … AmatsukazeがCMと判定してカットした時間の時間2桁固定
 - \$CDH\$ … AmatsukazeがCMと判定してカットした時間の時間
