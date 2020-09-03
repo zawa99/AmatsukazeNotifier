@@ -58,7 +58,7 @@ def main():
 
     # マクロを取得
     macros = utils.get_macro(os.environ)
-
+    
     # マクロでメッセージを置換
     errormessage = config.ErrorMessage
     for macro, macro_value in macros.items():
@@ -90,7 +90,7 @@ def main():
     
     
     #絵文字を無視して絵文字を無視してコンソールに出力
-    print(("Message: " + message.replace("\n", "\n         ")).encode('cp932','ignore'), end = "\n\n")
+    print(("Message: " + message.replace("\n", "\n                 ")).encode('cp932','ignore').decode("cp932"), end = "\n\n")
 
 
     # LINE Notify にメッセージを送信
