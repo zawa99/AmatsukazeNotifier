@@ -259,11 +259,11 @@ Amatsukazeの環境変数と同じマクロ
 - \$ODS\$ … 変換後の再生時間の秒
 - \$InSizeByte\$ … 変換前のサイズ（バイト単位）
 - \$InSizeKB\$ … 変換前のサイズ（KB単位）
-- \InSizeMB\$ … 変換前のサイズ（MB単位）
+- \$InSizeMB\$ … 変換前のサイズ（MB単位）
 - \$InSizeGB\$ … 変換前のサイズ（GB単位）少数第一位まで
 - \$OutSizeByte\$ … 変換後のサイズ（バイト単位）
 - \$OutSizeKB\$ … 変換後のサイズ（KB単位）
-- \OutSizeMB\$ … 変換後のサイズ（MB単位）
+- \$OutSizeMB\$ … 変換後のサイズ（MB単位）
 - \$OutSizeGB\$ … 変換後のサイズ（GB単位）少数第一位まで
 - \$CompressSizeByte\$ … エンコードで圧縮したサイズ（バイト単位）
 - \$CompressSizeKB\$ … エンコードで圧縮したサイズ（KB単位）
