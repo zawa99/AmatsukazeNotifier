@@ -18,21 +18,21 @@ class Utils:
 
         # 値が存在しなかった場合の初期値
         macro_default = '--'
-        
+
 
         #tsファイルから番組情報を取得
         tsinfo = self.get_ts_info(environ.get("IN_PATH"))
         tsRecStart = tsinfo[0]
         tsDuration = tsinfo[1]
         tsRecEnd = tsinfo[2]
-        
-        
+
+
 
         #AmatsukazeがCMと判定してカットした秒数を取得
         InDurationSeconds = int('{:.0f}'.format(float(environ.get("IN_DURATION", "0"))))
         OutDurationSeconds = int('{:.0f}'.format(float(environ.get("OUT_DURATION", "0"))))
         CutDurationSeconds = int('{:.0f}'.format(float(environ.get("IN_DURATION", "0"))-float(environ.get("OUT_DURATION", "0"))))
-        
+
 
         macro_table = {
 
@@ -65,7 +65,7 @@ class Utils:
             "NUM_INCIDENT": environ.get("NUM_INCIDENT", macro_default), #インシデント数
             "JSON_PATH": environ.get("JSON_PATH", macro_default), #出力JSONパス
             "LOG_PATH": environ.get("LOG_PATH", macro_default), #ログファイルパス
-            
+
             #独自マクロ
             "InFolderPath": os.path.dirname(environ.get("IN_PATH", macro_default)), #入力ファイルのフォルダパス（最後に\はなし）（バッチのみ）
             "InFileName": os.path.splitext(os.path.basename(environ.get("IN_PATH", macro_default)))[0], #入力ファイル名（拡張子なし）（バッチのみ）
@@ -81,8 +81,8 @@ class Utils:
             #"Genre2": environ.get("ITEM_GENRE", macro_default).split(" - ")[len(environ.get("ITEM_GENRE", macro_default).split(" - "))-1], #番組の詳細ジャンル
             "Genre": tsinfo[4].replace("\u3000"," "), #ジャンル 〔詳細ジャンル〕,
             "SubTitle": tsinfo[3].replace("\u3000"," "), #サブタイトル
-            
-            "HashTag": self.get_hashtag(jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False)), 
+
+            "HashTag": self.get_hashtag(jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False)),
             "ServiceNameHankaku": jaconv.z2h(environ.get('SERVICE_NAME', macro_default), digit = True, ascii = True, kana = False), #サービス名（チャンネル名） 英数半角
             "TitleHankaku": jaconv.z2h(environ.get('EVENT_NAME', macro_default), digit = True, ascii = True, kana = False), #番組名 英数半角
             "Title2Hankaku": jaconv.z2h(re.sub("\[.+?\]", "", environ.get("EVENT_NAME", macro_default)), digit = True, ascii = True, kana = False), #番組名 英数半角
@@ -99,9 +99,9 @@ class Utils:
             "TimeI": str(int(self.time.strftime("%M"))),
             "TimeSS": self.time.strftime("%S"),
             "TimeS": str(int(self.time.strftime("%S"))),
-            
-            
-            
+
+
+
             "SDYYYY": tsRecStart.strftime("%Y"), #開始日の年4桁
             "SDYY": tsRecStart.strftime("%y"), #開始日の年2桁
             "SDMM": tsRecStart.strftime("%m"), #開始日の月2桁固定
@@ -135,9 +135,9 @@ class Utils:
             "DUM": str(self.Seconds_to_HMS(tsDuration.seconds)[2]), #番組総時間の分（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
             "DUSS": str(self.Seconds_to_HMS(tsDuration.seconds)[3]).zfill(2), #番組総時間の秒2桁固定（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
             "DUS": str(self.Seconds_to_HMS(tsDuration.seconds)[3]), #番組総時間の秒（ファイル名：録画開始時の番組総時間、Bat：録画終了時の番組総時間）
-            
+
             #実行後のみ
-            
+
             #AmatsukazeがCMと判定してカットした時間
             "CDSecs": str(CutDurationSeconds), #AmatsukazeがCMと判定してカットした秒数（小数点以下四捨五入）
             "CDHH": str(self.Seconds_to_HMS(CutDurationSeconds)[1]).zfill(2),
@@ -147,7 +147,7 @@ class Utils:
             "CDSS": str(self.Seconds_to_HMS(CutDurationSeconds)[3]).zfill(2),
             "CDS": str(self.Seconds_to_HMS(CutDurationSeconds)[3]),
             "CutDur": self.Seconds_to_HMS(CutDurationSeconds)[0], #AmatsukazeがCMと判定したカットした時間(m分s秒 or s秒)
-            
+
             #変換前の再生時間
             "IDHH": str(self.Seconds_to_HMS(InDurationSeconds)[1]).zfill(2),
             "IDH": str(self.Seconds_to_HMS(InDurationSeconds)[1]),
@@ -155,7 +155,7 @@ class Utils:
             "IDM": str(self.Seconds_to_HMS(InDurationSeconds)[2]),
             "IDSS": str(self.Seconds_to_HMS(InDurationSeconds)[3]).zfill(2),
             "IDS": str(self.Seconds_to_HMS(InDurationSeconds)[3]),
-            
+
             #変換後の再生時間
             "ODHH": str(self.Seconds_to_HMS(OutDurationSeconds)[1]).zfill(2),
             "ODH": str(self.Seconds_to_HMS(OutDurationSeconds)[1]),
@@ -168,17 +168,17 @@ class Utils:
             "InSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024))), #変換前のサイズ（KB単位）
             "InSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024))), #変換前のサイズ（MB単位）
             "InSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024*1024))), #変換前のサイズ（GB単位）少数第一位まで
-            "OutSizeByte": str(int(environ.get("IN_SIZE", "0"))), #変換後のサイズ（バイト単位）
-            "OutSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024))), #変換後のサイズ（KB単位）
-            "OutSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024))), #変換後のサイズ（MB単位）
-            "OutSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")))/(1024*1024*1024))), #変換後のサイズ（GB単位）少数第一位まで
+            "OutSizeByte": str(int(environ.get("OUT_SIZE", "0"))), #変換後のサイズ（バイト単位）
+            "OutSizeKB": str('{:.0f}'.format((int(environ.get("OUT_SIZE", "0")))/(1024))), #変換後のサイズ（KB単位）
+            "OutSizeMB": str('{:.0f}'.format((int(environ.get("OUT_SIZE", "0")))/(1024*1024))), #変換後のサイズ（MB単位）
+            "OutSizeGB": str('{:.1f}'.format((int(environ.get("OUT_SIZE", "0")))/(1024*1024*1024))), #変換後のサイズ（GB単位）少数第一位まで
             "CompressSizeByte": str(int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0"))), #エンコードで圧縮したサイズ（バイト単位）
             "CompressSizeKB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0")))/(1024))), #エンコードで圧縮したサイズ（KB単位）
             "CompressSizeMB": str('{:.0f}'.format((int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0")))/(1024*1024))), #エンコードで圧縮したサイズ（MB単位）
             "CompressSizeGB": str('{:.1f}'.format((int(environ.get("IN_SIZE", "0")) - int(environ.get("OUT_SIZE", "0")))/(1024*1024*1024))) #エンコードで圧縮したサイズ（GB単位）少数第一位まで
 
 
-        } 
+        }
 
         return macro_table
 
@@ -231,7 +231,7 @@ class Utils:
             hashtag = '#at_x'
 
         # 地デジ
-        
+
         elif 'NHK総合' in service_name:
 
             hashtag = '#nhk'
@@ -278,7 +278,7 @@ class Utils:
             hashtag = '#' + service_name
 
         return hashtag
-    
+
     # エラー出力
     def error(self, message):
 
@@ -291,7 +291,7 @@ class Utils:
         #rplsinfoのパスを取得
         rplsinfo = os.path.join(os.getcwd(),"AmatsukazeNotifier","rplsinfo.exe")
         print("rplsinfo: "+rplsinfo)
-        
+
         #時間情報を取得
         d = subprocess.run([rplsinfo, ts_path, "-d"], stdout=subprocess.PIPE)
         date = d.stdout.decode("shift-jis") #YYYY/MM/DD
@@ -299,23 +299,23 @@ class Utils:
         time = t.stdout.decode("shift-jis") #HH/MM/SS
         p = subprocess.run([rplsinfo, ts_path, "-p"], stdout=subprocess.PIPE)
         duration = p.stdout.decode("shift-jis") #HH/MM/SS
-        
+
         i = subprocess.run([rplsinfo, ts_path, "-i"], stdout=subprocess.PIPE)
         info = i.stdout.decode("shift-jis").replace("\r\n","")
-        
+
         g = subprocess.run([rplsinfo, ts_path, "-g"], stdout=subprocess.PIPE)
         genre = g.stdout.decode("shift-jis").replace("\r\n","")
-        
+
         #datetime,timedelta型に変換
         RecStart = datetime.datetime.strptime((date.strip()+" "+time.strip()), '%Y/%m/%d %H:%M:%S')
         DurationTime = datetime.timedelta(hours=int(duration[:2]), minutes=int(duration[3:5]), seconds=int(duration[6:8]))
         RecEnd = RecStart + DurationTime
-        
+
 
         #放送開始時刻(datetime)、放送時間(timedelta)、放送終了時刻(timedelta)、曜日リスト(list)を返す
         return RecStart, DurationTime, RecEnd, info, genre
-        
-        
+
+
 
     # 実行時刻
     def get_exection_time(self):
@@ -338,7 +338,7 @@ class Utils:
     def get_weekday(self, in_datetime):
         weeklist = ['月', '火', '水', '木', '金', '土', '日']
         return weeklist[in_datetime.weekday()]
-    
+
     # timedeltaから時間を取得
     def Seconds_to_HMS(self, totalseconds):
         if totalseconds>=3600: #1時間以上
@@ -346,7 +346,7 @@ class Utils:
             M = (totalseconds%60)//60
             S = (totalseconds%60)%60
             timejp = str(H)+"時間"+str(M)+"分"+str(S)+"秒"
-            
+
         elif totalseconds<60: #1分未満
             H = 0
             M = 0
