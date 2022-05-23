@@ -60,7 +60,7 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 - AmatsukazeNotifier フォルダ
 - bat
 
-を Amatsukaze 本体 (Amatsukaze.vbs) があるフォルダに配置します。
+を Amatsukaze 本体 (Amatsukaze.vbs) があるフォルダに配置します。（batの2ファイル、AmatsukazeNotifier.exeとrplsinfo.exe、configだけでも動くはず）
 
 ### 2. 設定ファイルの作成
 
