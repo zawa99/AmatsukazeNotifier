@@ -143,3 +143,8 @@ AmatsukazeNotifier/config.py
 
 #macOS
 *.DS_Store
+
+# AmatsukazeNotifier build cache
+AmatsukazeNotifier/AmatsukazeNotifier.build/
+AmatsukazeNotifier/AmatsukazeNotifier.dist/
+AmatsukazeNotifier/AmatsukazeNotifier.onefile-build/

@@ -1,1 +1,1 @@
-python %CD%\AmatsukazeNotifier\AmatsukazeNotifier.py PostEncStart
+%CD%\AmatsukazeNotifier\AmatsukazeNotifier.exe PostEncStart

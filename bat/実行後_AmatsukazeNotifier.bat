@@ -1,5 +1,5 @@
 if "%SUCCESS%" == "1" (
-    python %CD%\AmatsukazeNotifier\AmatsukazeNotifier.py PostEncSuccess
+    %CD%\AmatsukazeNotifier\AmatsukazeNotifier.exe PostEncSuccess
 )  else (
-    python %CD%\AmatsukazeNotifier\AmatsukazeNotifier.py PostEncFailed
+    %CD%\AmatsukazeNotifier\AmatsukazeNotifier.exe PostEncFailed
 )
