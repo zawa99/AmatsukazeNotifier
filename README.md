@@ -1,12 +1,10 @@
 
 # AmatsukazeNotifier
 
-![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/01.jpg)
-
 Amatsukaze から LINE や Twitter（ツイート・DM）に通知を送れるツールです。
 
 ## About・Feature
-** このフォークについて **
+**このフォークについて**
 
 nukeniri氏の[AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) をマクロの修正と[Nuitka](https://github.com/Nuitka/Nuitka) を使って実行ファイルにしました(exe化)。実行環境や依存パッケージのインストールが不要です。
 
@@ -55,7 +53,7 @@ EDCBNotifierを導入している場合は、録画終了の通知後ほぼノ�
 
 ### 1. ダウンロード・配置
 
-[こちら](https://github.com/zawa99/AmatsukazeNotifier/releases/download/v1.0.0/AmatsukazeNotifier.zip) のリンクから、AmatsukazeNotifier.zip をダウンロードします。
+[こちら](https://github.com/zawa99/AmatsukazeNotifier/archive/refs/tags/v1.0.0.zip) のリンクから、AmatsukazeNotifier をダウンロードします。
 
 ダウンロードできたら解凍し、
 
@@ -268,22 +266,14 @@ LINE Notify へ通知しない場合は必要ありませんが、後述する T
 [LINE Notify](https://notify-bot.line.me/ja/) にアクセスし、右上の \[ログイン] から LINE へログインします（いつも使っているアカウントで構いません）。
 ログインできたら、右上のメニューから \[マイページ] に移動します。
 
-![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/07.png)
-
 下の方にある「アクセストークンの発行(開発者向け)」へ行き、 \[トークンを発行する] をクリックします。
-
-![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/08.png)
 
 トークン名は LINE Notify で通知が送られてきたときに \[AmatsukazeNotifier] のように付加される文字列です（ LINE Notify 全体でユニークである必要はないらしい）。
 通知を送信するトークルームは \[1:1 で LINE Notify から通知を受ける] か、任意のグループ LINE を選択してください。
 ここでは「1:1 で LINE Notify から通知を受ける」（現在ログインしているアカウントに届く）を選択します。
 
-![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/09.png)
-
  \[発行する] をクリックするとアクセストークンが発行されるので、 \[コピー] をクリックしてクリップボードにコピーします。
 アクセストークンはこの画面を閉じると二度と表示されない（一度解除し同じ内容でもう一度発行することはできるがアクセストークンは変わる）ので、どこかにメモしておくと良いでしょう。
-
-![Screenshot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/10.png)
 
 画面を閉じると LINE Notify と設定したトークルームが連携されているはずです。
 
@@ -308,8 +298,6 @@ EDCBNotifierの作者tsukumijima氏のツールである、[Twitter API のア�
 [Twitter Developers](https://developer.twitter.com/en/apps) にアクセスし、右上の \[Create App] から Twitter Developer アプリケーションの作成画面に移動します（ここで言う Twitter Developer アプリケーション（以下 Twitter API アプリ）は Twitter API を使うプロジェクトのような意味です）。
 Twitter API アプリを作成すると、Twitter API を使うために必要な Consumer Key・Consumer Secret を取得できます。
 すでに Twitter API アプリを作成している場合は飛ばすこともできますが、via が被るので新しく作ってもいいと思います。開発者登録のときとは異なり、審査はありません。
-
-![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/11.png)
 
 #### App name（必須・重複不可らしい）
 
@@ -370,18 +358,12 @@ Twitter API アプリを作成すると、Twitter API を使うために必要�
 
 ダイレクトメッセージを送信するため Permissions タブに移動し、\[Edit] をクリックします。
 
-![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/12.png)
-
 **Access permission** を **Read, write, and Direct Messages** に設定し、\[Save] で保存します。
 こうすることでツイートの読み取り・ツイートの書き込みなどに加え、ダイレクトメッセージを送信できるようになります。
 Permissions を変更すると今までに取得した Access Token・Access Token Secret が無効になります。注意してください。
 
-![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/13.png)
-
 Keys and tokens タブに移動し、API Key と API Key Secret をクリップボードにコピーします。
 API Key が Consumer Key 、API Key Secret が Consumer Secret にあたります。
-
-![ScreenShot](https://github.com/nukemiri/AmatsukazeNotifier/blob/images/Readme/14.png)
 
 開発者登録したアカウントで利用する場合は、**Access token & access token secret** の横の \[Generate]をクリックし、Access Token・Access Token Secret を生成します。
 Access Token・Access Token Secret が表示されるので、クリップボードにコピーします。
