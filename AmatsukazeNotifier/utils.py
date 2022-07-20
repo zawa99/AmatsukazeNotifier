@@ -1,10 +1,8 @@
 import os
 import sys
-import colorama
 import subprocess
 import jaconv
 import datetime
-import config
 import re
 
 class Utils:
@@ -92,7 +90,7 @@ class Utils:
             "TimeM": str(int(self.time.strftime("%m"))),
             "TimeDD": self.time.strftime("%d"),
             "TimeD": str(int(self.time.strftime("%d"))),
-            "TimeW": self.get_exection_day(),
+            "TimeW": self.get_execution_day(),
             "TimeHH": self.time.strftime("%H"),
             "TimeH": str(int(self.time.strftime("%H"))),
             "TimeII": self.time.strftime("%M"),
@@ -318,45 +316,45 @@ class Utils:
 
 
     # 実行時刻
-    def get_exection_time(self):
+    def get_execution_time(self):
         return self.time
 
 
     # 実行曜日
     # 参考: https://note.nkmk.me/python-datetime-day-locale-function/
-    def get_exection_day(self):
-        weeklist = ['月', '火', '水', '木', '金', '土', '日']
-        return weeklist[self.time.weekday()]
+    def get_execution_day(self):
+        week_list = ['月', '火', '水', '木', '金', '土', '日']
+        return week_list[self.time.weekday()]
 
 
     # バージョン情報
     def get_version(self):
 
-        return '1.0.0 alpha'
+        return '1.0.1 alpha'
 
     #datetimeから曜日
     def get_weekday(self, in_datetime):
-        weeklist = ['月', '火', '水', '木', '金', '土', '日']
-        return weeklist[in_datetime.weekday()]
+        week_list = ['月', '火', '水', '木', '金', '土', '日']
+        return week_list[in_datetime.weekday()]
 
     # timedeltaから時間を取得
-    def Seconds_to_HMS(self, totalseconds):
-        if totalseconds>=3600: #1時間以上
-            H = totalseconds//60
-            M = (totalseconds%60)//60
-            S = (totalseconds%60)%60
-            timejp = str(H)+"時間"+str(M)+"分"+str(S)+"秒"
+    def Seconds_to_HMS(self, total_seconds):
+        if total_seconds>=3600: #1時間以上
+            H = total_seconds//60
+            M = (total_seconds%60)//60
+            S = (total_seconds%60)%60
+            time_jp = str(H)+"時間"+str(M)+"分"+str(S)+"秒"
 
-        elif totalseconds<60: #1分未満
+        elif total_seconds<60: #1分未満
             H = 0
             M = 0
-            S = totalseconds
-            timejp = str(S)+"秒"
+            S = total_seconds
+            time_jp = str(S)+"秒"
 
         else: #1分以上1時間未満
             H = 0
-            M = totalseconds//60
-            S = totalseconds%60
-            timejp = str(M)+"分"+str(S)+"秒"
+            M = total_seconds//60
+            S = total_seconds%60
+            time_jp = str(M)+"分"+str(S)+"秒"
 
-        return timejp, H, M, S
+        return time_jp, H, M, S

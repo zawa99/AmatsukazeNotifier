@@ -18,14 +18,14 @@ def main():
     if config.NOTIFY_LOG:
         # 標準出力をファイルに変更
         sys.stdout = open(os.path.dirname(__file__) + '/' + 'AmatsukazeNotifier.log', mode = 'w', encoding = 'utf-8')
-    
+
     # ヘッダー
     header = '+' * 60 + '\n'
     header += '+{:^58}+\n'.format('AmatsukazeNotifier version ' + utils.get_version())
     header += '+' * 60 + '\n'
     print('\n' + header)
 
-    print('Time: ' + str(utils.get_exection_time()), end = '\n\n')
+    print('Time: ' + str(utils.get_execution_time()), end = '\n\n')
 
 
     # 引数を受け取る
@@ -47,7 +47,7 @@ def main():
 
         else:
 
-            # 引数が不正なので終了    
+            # 引数が不正なので終了
             utils.error('Invalid argument.')
 
     else:
@@ -58,7 +58,7 @@ def main():
 
     # マクロを取得
     macros = utils.get_macro(os.environ)
-    
+
     # マクロでメッセージを置換
     errormessage = config.ErrorMessage
     for macro, macro_value in macros.items():
@@ -87,8 +87,8 @@ def main():
 
         # 画像なし
         image = None
-    
-    
+
+
     #絵文字を無視して絵文字を無視してコンソールに出力
     print(("Message: " + message.replace("\n", "\n                 ")).encode('cp932','ignore').decode("cp932"), end = "\n\n")
 
@@ -152,7 +152,7 @@ def main():
             print('[DirectMessage] ' + colorama.Fore.RED + 'Error: ' + error.args[0], end = '\n\n')
         else:
             print('[DirectMessage] Result: Success')
-            print('[DirectMessage] Message: https://twitter.com/messages/' + 
+            print('[DirectMessage] Message: https://twitter.com/messages/' +
                 result_directmessage['event']['message_create']['target']['recipient_id'] + '-' +
                 result_directmessage['event']['message_create']['sender_id'], end = '\n\n')
 
