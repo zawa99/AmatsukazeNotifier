@@ -1,12 +1,14 @@
 **このフォークについて**
 
-nukeniri氏の[AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) を
+nukeniri氏の [AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) を
 - [Nuitka](https://github.com/Nuitka/Nuitka) を使って exe 化
 - config を yml 化
 - Dicord 通知を追加
 - Twitter 通知を削除
 
 したものです。
+
+- config.py から config.yml に移行しているため、設定ファイルは適宜読み替えてください。
 
 
 # AmatsukazeNotifier
