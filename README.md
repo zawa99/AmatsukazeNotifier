@@ -1,14 +1,19 @@
+**このフォークについて**
+
+nukeniri氏の[AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) を
+- [Nuitka](https://github.com/Nuitka/Nuitka) を使って exe 化
+- config を yml 化
+- Dicord 通知を追加
+- Twitter 通知を削除
+
+したものです。
+
 
 # AmatsukazeNotifier
 
 Amatsukaze から LINE や Twitter（ツイート・DM）に通知を送れるツールです。
 
 ## About・Feature
-**このフォークについて**
-
-nukeniri氏の[AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) をマクロの修正と[Nuitka](https://github.com/Nuitka/Nuitka) を使って実行ファイルにしました(exe化)。実行環境や依存パッケージのインストールが不要です。
-
-
 [Amatsukaze](https://github.com/nekopanda/Amatsukaze) のバッチファイル実行機能を使い、
 
 

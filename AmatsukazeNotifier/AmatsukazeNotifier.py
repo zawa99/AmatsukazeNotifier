@@ -2,160 +2,147 @@
 import os
 import sys
 import colorama
-import requests
+from ruamel.yaml import YAML
 from pprint import pprint
 
-import config
 from utils import Utils
-from sendline import Line
-from sendtwitter import Twitter
+from sendLine import Line
+from sendDiscord import Discord
+
+# 定数
+VERSION = '1.0.2 beta'
+
+BASE_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
+CONFIG_FILE = os.path.join(BASE_DIR, 'config.yml')
+LOG_FILE = os.path.join(BASE_DIR, 'AmatsukazeNotifier.log')
+
+def load_config(config_path):
+    """YAMLファイルから設定を読み込む"""
+    if not os.path.exists(config_path):
+        print('error: Config file not found.')
+        sys.exit(1)
+
+    with open(config_path, encoding='UTF-8') as stream:
+        yaml = YAML()
+        return yaml.load(stream)
+
+def initialize_logging(config):
+    """ログ出力先を設定"""
+    if config['general'].get('notify_log'):
+        sys.stdout = open(LOG_FILE, mode='w', encoding='utf-8')
+
+def print_header(utils):
+    """ヘッダー情報を出力"""
+    header = '+' * 60
+    version_info = f"AmatsukazeNotifier version {VERSION}"
+    print(f"\n{header}\n+{version_info:^58}+\n{header}")
+    print('Time: ' + str(utils.get_execution_time()) + '\n')
+
+def get_notification_message(config, caller):
+    """通知メッセージを取得"""
+    if caller in config['message'] and caller in config['general']['notify_events']:
+        return "\n".join(config['message'][caller])
+    elif caller in config['message']:
+        print(f'Info: {caller} notification is off, so it ends.')
+        sys.exit(0)
+    else:
+        return None
+
+def replace_macros(message, macros):
+    """メッセージ内のマクロを置換"""
+    for macro, macro_value in macros.items():
+        message = message.replace(f'${macro}$', macro_value)
+    return message
+
+def get_notify_image(config):
+    """通知用の画像を取得"""
+    image_path = config['general'].get('notify_image')
+    if image_path:
+        full_path = os.path.join(os.path.dirname(__file__), image_path)
+        if os.path.isfile(image_path):
+            return image_path
+        elif os.path.isfile(full_path):
+            return full_path
+    return None
+
+def send_line_notification(config, message, image):
+    """LINE Notifyを使って通知を送信"""
+    if 'LINE' in config['general']['notify_types']:
+        line = Line(config['line']['access_token'])
+        try:
+            result = line.send_message(message, image=image)
+            if result['status'] == 200:
+                print(f'[LINE Notify] Result: Success (Code: {result["status"]})')
+                print(f'[LINE Notify] Message: {result["message"]}\n')
+            else:
+                print(f'[LINE Notify] Result: Failed (Code: {result["status"]})')
+                print(f'[LINE Notify] {colorama.Fore.RED}Error: {result["message"]}\n')
+        except Exception as error:
+            print(f'[LINE Notify] Result: Failed')
+            print(f'[LINE Notify] {colorama.Fore.RED}Error: {error}\n')
+
+def send_discord_notification(config, message, image):
+    """Discord Webhookを使って通知を送信"""
+    if 'Discord' in config['general']['notify_types']:
+        discord = Discord(config['discord']['webhook_url'])
+        try:
+            result = discord.send_message(message, image=image)
+            if result['status'] in {200, 204}:
+                print(f'[Discord] Result: Success (Code: {result["status"]})')
+                print(f'[Discord] Message: {result["message"]}\n')
+            else:
+                print(f'[Discord] Result: Failed (Code: {result["status"]})')
+                print(f'[Discord] {colorama.Fore.RED}Error: {result["message"]}\n')
+        except Exception as error:
+            print(f'[Discord] Result: Failed')
+            print(f'[Discord] {colorama.Fore.RED}Error: {error}\n')
 
 def main():
-
     # 初期化
-    colorama.init(autoreset = True)
+    colorama.init(autoreset=True)
     utils = Utils()
-    if config.NOTIFY_LOG:
-        # 標準出力をファイルに変更
-        sys.stdout = open(os.path.dirname(__file__) + '/' + 'AmatsukazeNotifier.log', mode = 'w', encoding = 'utf-8')
 
-    # ヘッダー
-    header = '+' * 60 + '\n'
-    header += '+{:^58}+\n'.format('AmatsukazeNotifier version ' + utils.get_version())
-    header += '+' * 60 + '\n'
-    print('\n' + header)
+    # 設定ファイルの読み込み
+    config = load_config(CONFIG_FILE)
 
-    print('Time: ' + str(utils.get_execution_time()), end = '\n\n')
+    # ログ出力先の設定
+    initialize_logging(config)
 
+    # ヘッダー出力
+    print_header(utils)
 
-    # 引数を受け取る
-    if (len(sys.argv) > 1):
-
-        caller = sys.argv[1] # 呼び出し元のバッチファイルの名前
-        print('Event: ' + caller, end = '\n\n')
-
-        # NOTIFY_MESSAGE にあるイベントでかつ通知がオンになっていれば
-        if (caller in config.NOTIFY_MESSAGE and caller in config.NOTIFY_EVENT):
-
-            # メッセージをセット
-            message = config.NOTIFY_MESSAGE[caller]
-
-        elif caller in config.NOTIFY_MESSAGE:
-
-            print('Info: ' + caller + ' notification is off, so it ends.', end = '\n\n')
-            sys.exit(0)
-
-        else:
-
-            # 引数が不正なので終了
-            utils.error('Invalid argument.')
-
-    else:
-
-        # 引数がないので終了
+    # 引数確認
+    if len(sys.argv) <= 1:
         utils.error('Argument does not exist.')
+    caller = sys.argv[1]
+    print(f'Event: {caller}\n')
 
+    # 通知メッセージの取得
+    message = get_notification_message(config, caller)
+    if not message:
+        utils.error('Invalid argument.')
 
-    # マクロを取得
+    # マクロ置換
     macros = utils.get_macro(os.environ)
+    message = replace_macros(message, macros)
 
-    # マクロでメッセージを置換
-    errormessage = config.ErrorMessage
-    for macro, macro_value in macros.items():
-
-        # $$ で囲われた文字を置換する
-        message = message.replace('$' + macro + '$', macro_value)
-        errormessage = errormessage.replace('$' + macro + '$', macro_value)
-
-    # エラーメッセージがある場合メッセージに追加
-    if (caller == "PostEncSuccess" or caller == "PostEncFailed") and macros["ERROR_MESSAGE"] != "":
-        message += ("\n"+ errormessage)
+    # エラーメッセージを追加
+    errormessage = replace_macros("\n".join(config['error_message']), macros)
+    if caller in ["PostEncSuccess", "PostEncFailed"] and macros.get("ERROR_MESSAGE"):
+        message += f"\n{errormessage}"
         print("エラーメッセージを検出: " + errormessage)
 
-    # 送信する画像
-    if (config.NOTIFY_IMAGE != None and os.path.isfile(config.NOTIFY_IMAGE)):
+    # 画像の取得
+    image = get_notify_image(config)
 
-        # そのまま使う
-        image = config.NOTIFY_IMAGE
+    # 絵文字を無視してコンソールに出力
+    print(("Message: " + message.replace("\n", "\n                 "))
+          .encode('cp932', 'ignore').decode("cp932"), end="\n\n")
 
-    elif (config.NOTIFY_IMAGE != None and os.path.isfile(os.path.dirname(__file__) + '/' + config.NOTIFY_IMAGE)):
-
-        # パスを取得して連結
-        image = os.path.dirname(__file__) + '/' + config.NOTIFY_IMAGE
-
-    else:
-
-        # 画像なし
-        image = None
-
-
-    #絵文字を無視して絵文字を無視してコンソールに出力
-    print(("Message: " + message.replace("\n", "\n                 ")).encode('cp932','ignore').decode("cp932"), end = "\n\n")
-
-
-    # LINE Notify にメッセージを送信
-    if ('LINE' in config.NOTIFY_TYPE):
-
-        line = Line(config.LINE_ACCESS_TOKEN)
-
-        try:
-            result_line = line.send_message(message, image = image)
-        except Exception as error:
-            print('[LINE Notify] Result: Failed')
-            print('[LINE Notify] ' + colorama.Fore.RED + 'Error: ' + error.args[0], end = '\n\n')
-        else:
-            if result_line['status'] != 200:
-                # ステータスが 200 以外（失敗）
-                print('[LINE Notify] Result: Failed (Code: ' + str(result_line['status']) + ')')
-                print('[LINE Notify] ' + colorama.Fore.RED + 'Error: ' + result_line['message'], end = '\n\n')
-            else:
-                # ステータスが 200（成功）
-                print('[LINE Notify] Result: Success (Code: ' + str(result_line['status']) + ')')
-                print('[LINE Notify] Message: ' + result_line['message'], end = '\n\n')
-
-    # Twitter にツイートを送信
-    if ('Tweet' in config.NOTIFY_TYPE):
-
-        twitter = Twitter(
-            config.TWITTER_CONSUMER_KEY,
-            config.TWITTER_CONSUMER_SECRET,
-            config.TWITTER_ACCESS_TOKEN,
-            config.TWITTER_ACCESS_TOKEN_SECRET
-        )
-
-        # ツイートを送信
-        try:
-            result_tweet = twitter.send_tweet(message, image = image)
-        except Exception as error:
-            print('[Tweet] Result: Failed')
-            print('[Tweet] ' + colorama.Fore.RED + 'Error: ' + error.args[0], end = '\n\n')
-        else:
-            print('[Tweet] Result: Success')
-            print('[Tweet] Tweet: https://twitter.com/i/status/' + str(result_tweet['id']), end = '\n\n')
-
-
-    # Twitter にダイレクトメッセージを送信
-    if ('DirectMessage' in config.NOTIFY_TYPE):
-
-        twitter = Twitter(
-            config.TWITTER_CONSUMER_KEY,
-            config.TWITTER_CONSUMER_SECRET,
-            config.TWITTER_ACCESS_TOKEN,
-            config.TWITTER_ACCESS_TOKEN_SECRET
-        )
-
-        # ダイレクトメッセージを送信
-        try:
-            result_directmessage = twitter.send_direct_message(message, image = image, destination = config.NOTIFY_DIRECTMESSAGE_TO)
-        except Exception as error:
-            print('[DirectMessage] Result: Failed')
-            print('[DirectMessage] ' + colorama.Fore.RED + 'Error: ' + error.args[0], end = '\n\n')
-        else:
-            print('[DirectMessage] Result: Success')
-            print('[DirectMessage] Message: https://twitter.com/messages/' +
-                result_directmessage['event']['message_create']['target']['recipient_id'] + '-' +
-                result_directmessage['event']['message_create']['sender_id'], end = '\n\n')
-
+    # LINE通知の送信
+    send_line_notification(config, message, image)
+    # Discord通知の送信
+    send_discord_notification(config, message, image)
 
 if __name__ == '__main__':
     main()

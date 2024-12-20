@@ -327,11 +327,6 @@ class Utils:
         return week_list[self.time.weekday()]
 
 
-    # バージョン情報
-    def get_version(self):
-
-        return '1.0.1 alpha'
-
     #datetimeから曜日
     def get_weekday(self, in_datetime):
         week_list = ['月', '火', '水', '木', '金', '土', '日']

@@ -1,0 +1,104 @@
+# ====================  環境設定  ====================
+
+# 配列はインデントしてハイフン (-) でリスト項目を記述
+# 辞書はキー: 値 の形式で記述
+# コメントは # を使用
+# 文字コードは UTF-8 (BOMなし)、改行コードは LF にすること
+# 保存形式によっては動作しない場合があるので注意（メモ帳は非推奨）
+# 編集にはシンタックスハイライト対応のエディタ（例: VSCode）を推奨
+
+general:
+  # ====================  全般  ====================
+
+  # 通知タイプ
+  # LINE (LINE Notify)・Discord(Discord Webhook) から選択
+  # 複数のタイプを設定する場合はリスト形式で記述
+
+  # 例: 通知タイプをLINEだけ設定
+  # notify_types:
+  #   - LINE
+  # 例: LINEとDiscordの両方を設定
+  # notify_types:
+  #   - LINE
+  #   - Discord
+
+  notify_types:
+    - LINE
+    - Discord
+
+  # 通知イベント
+  # 指定したイベントのみ通知します。
+  # イベントを設定しない場合、そのイベントは通知されません
+
+  # イベント一覧:
+  # - PostEncStart: 変換開始時
+  # - PostEncSuccess: 変換成功時
+  # - PostEncFailed: 変換失敗時
+
+  # 例: すべてのイベントを通知
+  # notify_events:
+  #   - PostEncStart
+  #   - PostEncSuccess
+  #   - PostEncFailed
+
+  notify_events:
+    - PostEncStart
+    - PostEncSuccess
+    - PostEncFailed
+
+  # 通知時に添付する画像
+  # フルパスまたはファイル名を指定
+  # 画像が大きすぎると通知が失敗する場合があります
+  # 画像を送信しない場合は null とします
+
+  # 例: 画像を指定する場合
+  # notify_image: 'C:/Users/User/Pictures/AmatsukazeNotifier.png'
+  # 例: 画像を送信しない場合
+  # notify_image: null
+
+  notify_image: null
+
+  # ログの出力設定
+  # true: ログをファイルに保存
+  # false: コンソールに出力（保存しない）
+
+  notify_log: false
+
+message:
+  # ===================  メッセージ  ===================
+
+  # 改行を入れる場合は配列でハイフン (-) でリスト項目で記述
+  # 使用可能なマクロについては README.md を参照
+
+  # 変換開始時のメッセージ
+  PostEncStart:
+    - "🔥 変換開始: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$"
+    - "$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$"
+    - "プロファイル: $PROFILE_NAME$"
+
+  # 変換成功時のメッセージ
+  PostEncSuccess:
+    - "✅ 変換成功: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$"
+    - "$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$"
+    - "プロファイル: $PROFILE_NAME$"
+    - "カット: $CutDur$ 圧縮: $CompressSizeGB$GB"
+
+  # 変換失敗時のメッセージ
+  PostEncFailed:
+    - "⚠️ 変換失敗: $SDYYYY$/$SDMM$/$SDDD$($SDW$) $ServiceNameHankaku$ $HashTag$"
+    - "$STHH$:$STMM$～$ETHH$:$ETMM$ $TitleHankaku$"
+    - "プロファイル: $PROFILE_NAME$"
+
+error_message:
+  #変換終了時のエラーメッセージ
+  # PostEncSuccess または PostEncFailed の通知時にメッセージの下に追加されます
+  # エラーメッセージが不要な場合は空欄に設定します
+  - "エラー: $ERROR_MESSAGE$"
+
+line:
+  # LINE Notify Access Token
+  access_token: YOUR_LINE_ACCESS_TOKEN
+
+discord:
+  # Discord Webhook URL
+  webhook_url: YOUR_DISCORD_WEBHOOK_URL
