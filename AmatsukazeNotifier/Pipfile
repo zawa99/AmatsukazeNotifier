@@ -5,14 +5,15 @@ name = "pypi"
 
 [scripts]
 build = "nuitka --mingw64 --follow-imports --onefile AmatsukazeNotifier.py"
+start = "python AmatsukazeNotifier.py PostEncStart"
 
 [packages]
 zstandard = "*"
-colorama = ">=0.4.1"
-jaconv = ">=0.2.4"
-requests = ">=2.23.0"
-twitter = ">=1.18.0"
-Nuitka = "*"
+colorama = "*"
+jaconv = "*"
+requests = "*"
+nuitka = "*"
+"ruamel.yaml" = "*"
 
 [dev-packages]
 
