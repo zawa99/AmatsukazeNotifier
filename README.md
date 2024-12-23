@@ -1,6 +1,6 @@
 **このフォークについて**
 
-nukeniri氏の [AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) を
+nukemiri氏の [AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifier) を
 - [Nuitka](https://github.com/Nuitka/Nuitka) を使って exe 化
 - config を yml 化
 - Dicord 通知を追加
