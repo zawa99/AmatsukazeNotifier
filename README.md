@@ -9,7 +9,7 @@ nukemiri氏の [AmatsukazeNotifier](https://github.com/nukemiri/AmatsukazeNotifi
 したものです。
 
 - config.py から config.yml に移行しているため、設定の記述方法は適宜読み替えてください。
-- AmatsukazeNotifier.exe と config.default.yml をリネームした config.yml の2ファイルを用意し設定すれば動きます。
+- AmatsukazeNotifier.exe, rplsinfo.exe と config.default.yml をリネームした config.yml の3ファイルを用意し設定すれば動くはずです。
 
 
 # AmatsukazeNotifier
